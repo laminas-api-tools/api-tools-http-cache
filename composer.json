@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zendframework": "~2.3-dev",
+        "zfcampus/zf-api-problem": "~1.0-dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZF\\HttpCache\\": "src/",
+            "ZFTest\\HttpCache\\": "test/"
+        },
+    }
+}
