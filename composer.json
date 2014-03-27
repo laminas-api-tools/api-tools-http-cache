@@ -1,13 +1,27 @@
-{
+{    
+    "name": "corentin-larose/zf-http-cache",    
+    "description": "ZF2 Module providing http cache headers support",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "zend",
+        "module",
+        "cache"
+    ],
     "require": {
         "php": ">=5.3.23",
-        "zendframework/zendframework": "~2.3-dev",
-        "zfcampus/zf-api-problem": "~1.0-dev"
+        "zendframework/zend-eventmanager": "~2.3",
+        "zendframework/zend-http": "~2.3",
+        "zendframework/zend-mvc": "~2.3"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "ZF\\HttpCache\\": "src/",
             "ZFTest\\HttpCache\\": "test/"
         },
+        "classmap": [
+            "Module.php"
+        ]
     }
 }

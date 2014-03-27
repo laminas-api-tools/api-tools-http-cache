@@ -13,8 +13,8 @@ class HttpCacheListenerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = array();
-        if ($services->has('Config')) {
-            $config = $services->get('Config');
+        if ($serviceLocator->has('Config')) {
+            $config = $serviceLocator->get('Config');
             if (isset($config['zf-http-cache'])) {
                 $config = $config['zf-http-cache'];
             }

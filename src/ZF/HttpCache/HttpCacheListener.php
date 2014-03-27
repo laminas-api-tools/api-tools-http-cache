@@ -1,8 +1,10 @@
 <?php
 namespace ZF\HttpCache;
 
+use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
+use Zend\Http\Header;
 use Zend\Http\Headers;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
@@ -20,29 +22,12 @@ class HttpCacheListener implements ListenerAggregateInterface
     /**
      * @var array
      */
+    protected $cacheConfig = array();
+
+    /**
+     * @var array
+     */
     protected $config = array();
-
-    /**
-     * @var array
-     */
-    protected $defaultHttpMethodsBlackList = array(
-        Httprequest::METHOD_CONNECT,
-        Httprequest::METHOD_DELETE,
-        Httprequest::METHOD_HEAD,
-        Httprequest::METHOD_OPTIONS,
-        Httprequest::METHOD_PATCH,
-        Httprequest::METHOD_POST,
-        Httprequest::METHOD_PROPFIND,
-        Httprequest::METHOD_PUT,
-        Httprequest::METHOD_TRACE,
-    );
-
-    /**
-     * @var array
-     */
-    protected $defaultHttpMethodsWhiteList = array(
-        Httprequest::METHOD_GET,
-    );
 
     /**
      * @param EventManagerInterface $events
@@ -50,127 +35,231 @@ class HttpCacheListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $request = $e->getRequest();
-
-        if (
-           ! empty($this->config['enabled'])
-           and $request instanceof HttpRequest
-        ) {
-            $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -1000);
-            $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onFinish'), -1000);
-        }
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), -1000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onResponse'), -1000);
     }
 
     /**
-     * @param  MvcEvent $e
-     * @return null|
+     * Checks whether there is a config for this HTTP method.
+     *
+     * @return boolean
      */
-    public function onRoute(MvcEvent $e)
+    public function hasCacheConfig()
     {
-        /* @var $request HttpRequest */
-        $request = $e->getRequest();
-        if (! $request instanceof HttpRequest) {
-            return;
+        return ! empty($this->cacheConfig);
+    }
+
+    /**
+     * Checks whether to handle this status code.
+     *
+     * @param  HttpResponse $response
+     * @return boolean
+     */
+    public function checkStatusCode(HttpResponse $response)
+    {
+        // Only 200 responses are cached by default
+        if (empty($this->config['http_codes_black_list'])) {
+            return $response->isOk();
         }
 
-        /* @var $response Response */
-        $response = $e->getResponse();
-        if (! $response instanceof HttpResponse) {
-            return;
-        }
+        $statusCode = $response->getStatusCode();
 
-        // check enabled (could be disabled during dispatch loop)
-        if (empty($this->config['enabled'])) {
-            return;
-        }
+        return ! in_array($statusCode, (array) $this->config['http_codes_black_list']);
+    }
 
-        // check HTTP method
-        $method = $request->getMethod();
-
-        if (in_array($method, (array) $this->config['http_methods_black_list'])) {
-            return;
-        }
-
-        if (! in_array($method, (array) $this->config['http_methods_white_list'])) {
-            return;
-        }
-
-        /* @var $headers Headers */
-        $headers = $request->getHeaders();
-
-        if ($headers->has('Etag')) {
-        }
-
-        if ($headers->has('If-Modified-Since')) {
-            $ifModifiedSince = $request->getHeader('If-Modified-Since');
-        }
-
-        if ($headers->has('If-Not-Modified-Since')) {
-            $ifNotModifiedSince = $request->getHeader('If-Not-Modified-Since');
-        }
-
-        if ($headers->has('Last-Modified')) {
-            $lastModified = $request->getHeader('Last-Modified');
-        }
+    /**
+     * @return array
+     */
+    public function getCacheConfig()
+    {
+        return $this->cacheConfig;
     }
 
     /**
      * @param MvcEvent $e
      */
-    public function onFinish(MvcEvent $e)
+    public function onResponse(MvcEvent $e)
     {
-        // check enabled (could be disabled during dispatch loop)
-        if (empty($this->config['enabled'])) {
+        if (empty($this->config['enable'])) {
             return;
         }
 
         /* @var $response HttpResponse */
         $response = $e->getResponse();
 
-        // check HTTP code white list + black list
-        $statusCode = $response->getStatusCode();
-
-        if (
-            ! empty($this->config['http_codes_white_list'])
-            and ! in_array($statusCode, (array) $this->config['http_codes_white_list'])
-        ) {
+        if (! $response instanceof HttpResponse) {
             return;
         }
 
-        // Only 200 responses are cached by default
-        if (empty($this->config['http_codes_black_list'])) {
-            if (! $response->isOk()) {
-                return;
-            }
-        } elseif (! in_array($statusCode, (array) $this->config['http_codes_black_list'])) {
+        if (! $this->checkStatusCode($response)) {
             return;
         }
 
-        // Age
-        // CacheControl
-        // Etag
-        // Expires
-        // IfModifiedSince
-        // IfUnmodifiedSince
-        // LastModified
-        // Pragma
+        /* @var $headers Headers */
+        $headers = $response->getHeaders();
+
+        $this->setExpires($headers)
+            ->setCacheControl($headers)
+            ->setPragma($headers)
+            ->setVary($headers);
     }
 
     /**
+     * @param MvcEvent $e
+     */
+    public function onRoute(MvcEvent $e)
+    {
+        if (empty($this->config['enable'])) {
+            return;
+        }
+
+        /* @var $request HttpRequest */
+        $request = $e->getRequest();
+        if (! $request instanceof HttpRequest) {
+            return;
+        }
+
+        if (! empty($this->config['controllers'])) {
+            $cacheConfig = $this->config['controllers'];
+        } else {
+            $this->cacheConfig = array();
+
+            return;
+        }
+
+        $controller = $e->getRouteMatch()
+            ->getParam('controller');
+
+        if (! empty($cacheConfig[$controller])) {
+            $cacheConfig = $cacheConfig[$controller];
+        } elseif (! empty($cacheConfig['*'])) {
+            $cacheConfig = $cacheConfig['*'];
+        } else {
+            $this->cacheConfig = array();
+
+            return;
+        }
+
+        $method = strtolower($request->getMethod());
+
+        if (! empty($cacheConfig[$method])) {
+            $cacheConfig = $cacheConfig[$method];
+        } elseif (! empty($cacheConfig['*'])) {
+            $cacheConfig = $cacheConfig['*'];
+        } else {
+            $this->cacheConfig = array();
+
+            return;
+        }
+
+        $this->cacheConfig = $cacheConfig;
+    }
+
+    /**
+     * Sets cache config.
+     *
+     * @param  array $config
+     * @return self
+     */
+    public function setCacheConfig(array $cacheConfig)
+    {
+        $this->cacheConfig = $cacheConfig;
+
+        return $this;
+    }
+
+    /**
+     * @param  Headers $headers
+     * @return self
+     */
+    public function setCacheControl(Headers $headers)
+    {
+        if (
+            ! empty($this->cacheConfig['cache-control']['value'])
+            and (! $headers->has('cache-control')
+            || ! empty($this->cacheConfig['cache-control']['override']))
+        ) {
+            $cacheControl = Header\CacheControl::fromString("Cache-Control: {$this->cacheConfig['cache-control']['value']}");
+            $headers->addHeader($cacheControl);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets config.
+     *
      * @param  array $config
      * @return self
      */
     public function setConfig(array $config)
     {
-        if (empty($config['http_methods_black_list'])) {
-            $config['http_methods_black_list'] = $this->defaultHttpMethodsBlackList;
-        }
-
-        if (empty($config['http_methods_white_list'])) {
-            $config['http_methods_white_list'] = $this->defaultHttpMethodsWhiteList;
-        }
-
         $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * @param  Headers $headers
+     * @return self
+     */
+    public function setExpires(Headers $headers)
+    {
+        if (
+            ! empty($this->cacheConfig['expires']['value'])
+            and (! $headers->has('expires')
+            || ! empty($this->cacheConfig['expires']['override']))
+        ) {
+            $expires = new Header\Expires();
+            try {
+                $expires->setDate($this->cacheConfig['expires']['value']);
+            } catch (\Zend\Http\Header\Exception\InvalidArgumentException $e) {
+                if ($headers->has('date')) {
+                    $date = $headers->get('date')->date();
+                } else {
+                    $date = "@{$_SERVER['REQUEST_TIME']}";
+                }
+                $expires->setDate($date);
+            }
+
+            $headers->addHeader($expires);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  Headers $headers
+     * @return self
+     */
+    public function setPragma(Headers $headers)
+    {
+        if (
+            ! empty($this->cacheConfig['pragma']['value'])
+            and (! $headers->has('pragma')
+            || ! empty($this->cacheConfig['pragma']['override']))
+        ) {
+            $pragma = new Header\Pragma($this->cacheConfig['pragma']['value']);
+            $headers->addHeader($pragma);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  Headers $headers
+     * @return self
+     */
+    public function setVary(Headers $headers)
+    {
+        if (
+            ! empty($this->cacheConfig['vary']['value'])
+            and (! $headers->has('vary')
+            || ! empty($this->cacheConfig['vary']['override']))
+        ) {
+            $vary = new Header\Vary($this->cacheConfig['vary']['value']);
+            $headers->addHeader($vary);
+        }
 
         return $this;
     }
