@@ -137,6 +137,38 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
+
+            array(
+                array(
+                    'enable' => true,
+                    'controllers' => array(
+                        '*' => array(
+                            '*' => array(
+                                'cache-control' => array(
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ),
+                            ),
+                        ),
+                        'baz' => array(
+                            'get' => array(
+                                'cache-control' => array(
+                                    'override' => true,
+                                    'value'    => 'public',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                'head',
+                array('controller' => 'baz'),
+                array(
+                    'cache-control' => array(
+                        'override' => false,
+                        'value'    => 'private',
+                    ),
+                ),
+            ),
         );
     }
 

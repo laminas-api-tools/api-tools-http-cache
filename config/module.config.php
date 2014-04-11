@@ -8,6 +8,14 @@ return array(
 
     'zf-http-cache' => array(
     //    'controllers' => array(
+    //        '*' => array( // No cache by default
+    //    	      '*' => array(
+    //                'cache-control' => array(
+    //                    'override' => false,
+    //                    'value'    => 'private',
+    //                ),
+    //            ),
+    //        ),
     //        'home' => array( // router route name
     //            'get' => array( // Http method (wildcard '*' supported as whatever method)
     //                /*
@@ -45,7 +53,7 @@ return array(
     //        ),
     //    ),
     //
-    //    'enable' => true, // Wheter to enable http cache
+    //    'enable' => true, // Whether to enable http cache
     //
     //    // Never cache these HTTP status codes. Defaults to all others than 200.
     //    'http_codes_black_list' => array(),
