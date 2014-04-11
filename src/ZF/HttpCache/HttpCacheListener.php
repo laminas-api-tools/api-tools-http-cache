@@ -131,9 +131,9 @@ class HttpCacheListener implements ListenerAggregateInterface
             ->getParam('controller');
 
         if (! empty($cacheConfig[$controller])) {
-            $cacheConfig = $cacheConfig[$controller];
+            $controllerConfig = $cacheConfig[$controller];
         } elseif (! empty($cacheConfig['*'])) {
-            $cacheConfig = $cacheConfig['*'];
+            $controllerConfig = $cacheConfig['*'];
         } else {
             $this->cacheConfig = array();
 
@@ -142,17 +142,21 @@ class HttpCacheListener implements ListenerAggregateInterface
 
         $method = strtolower($request->getMethod());
 
-        if (! empty($cacheConfig[$method])) {
-            $cacheConfig = $cacheConfig[$method];
-        } elseif (! empty($cacheConfig['*'])) {
-            $cacheConfig = $cacheConfig['*'];
+        if (! empty($controllerConfig[$method])) {
+            $methodConfig = $controllerConfig[$method];
+        } elseif (! empty($controllerConfig['*'])) {
+            $methodConfig = $controllerConfig['*'];
+        } elseif (! empty($cacheConfig['*'][$method])) {
+            $methodConfig = $cacheConfig['*'][$method];
+        } elseif (! empty($cacheConfig['*']['*'])) {
+            $methodConfig = $cacheConfig['*']['*'];
         } else {
             $this->cacheConfig = array();
 
             return;
         }
 
-        $this->cacheConfig = $cacheConfig;
+        $this->cacheConfig = $methodConfig;
     }
 
     /**

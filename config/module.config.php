@@ -8,6 +8,14 @@ return array(
 
     'zf-http-cache' => array(
     //    'controllers' => array(
+    //        '*' => array( // No cache by default
+    //    	      '*' => array(
+    //                'cache-control' => array(
+    //                    'override' => false,
+    //                    'value'    => 'private',
+    //                ),
+    //            ),
+    //        ),
     //        'home' => array( // router route name
     //            'get' => array( // Http method (wildcard '*' supported as whatever method)
     //                /*
