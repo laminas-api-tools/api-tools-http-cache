@@ -53,7 +53,7 @@ return array(
     //        ),
     //    ),
     //
-    //    'enable' => true, // Wheter to enable http cache
+    //    'enable' => true, // Whether to enable http cache
     //
     //    // Never cache these HTTP status codes. Defaults to all others than 200.
     //    'http_codes_black_list' => array(),
