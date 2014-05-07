@@ -52,22 +52,44 @@ The top-level configuration key for user configuration of this module is `zf-htt
 
 #### Key: `controllers`
 
-TODO
+The `controllers` key is utilized for mapping a combination of a route and a HTTP method (see below) to a cache configuration.
+
+##### Sub-key: `*|<route name>`
+
+Either a route name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()`, case-sensitive) or a wildcard.
+A wildcard stands for all the non-specified routes.
+
+###### Sub-sub-key: `<http method>`
+
+Either a HTTP method (as returned by `Zend\Http\Request::getMethod()`) in lower case or a wildcard.
+A wildcard stands for all the non-specified HTTP methods.
 
 #### Key: `enable`
 
-TODO
+The `enable` key is utilized for enabling/disabling the http cache module.
+** Caution: when disabled, http cache module doesn't override/remove the cache headers sent by your application. **
 
+Example:
+
+```php
+'enable' => true, // Cache module is enabled.
+```
 #### Key: `http_codes_black_list`
 
-TODO
+The `http_codes_black_list` is utilized to avoid caching the responses with the listed HTTP status codes.
+Defaults to all others than `200 OK`.
+
+Example:
+
+```php
+'http_codes_black_list' => array('201', '304', '400', '500'), // Whatever the other configurations, the responses with these codes won't be cached.
+```
 
 ### System Configuration
 
 TODO
 
-The following configuration is provided in `config/module.config.php` to enable the module to
-function:
+The following configuration is provided in `config/module.config.php` to enable the module to function:
 
 ```php
 'service_manager' => array(
