@@ -45,8 +45,8 @@ class Bootstrap
                 'Zend\Loader\StandardAutoloader' => array(
                     'autoregister_zf' => true,
                     'namespaces' => array(
-                        'ZF\HttpCache' => __DIR__ . '/../src/ZF/HttpCache/',
-                        __NAMESPACE__ => __DIR__ . '/ZFTest/HttpCache/',
+                        'ZF\HttpCache' => __DIR__ . '/../src/',
+                        __NAMESPACE__ => __DIR__,
                     ),
                 ),
             ));
