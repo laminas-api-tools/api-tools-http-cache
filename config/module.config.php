@@ -8,6 +8,15 @@ return array(
 
     'zf-http-cache' => array(
     //    'controllers' => array(
+    //        /*
+    //         * Wildcards: all the responses for the routes and HTTP methods others
+    //         * than those configured will have a Cache-control:private header
+    //         * unless a Cache-control header has been sent by application, since
+    //         * override is set to false.
+    //         *
+    //         * All the responses for a non configured HTTP method within a
+    //         * configured route  will have the same behavior.
+    //         */
     //        '*' => array( // No cache by default
     //    	      '*' => array(
     //                'cache-control' => array(
@@ -16,6 +25,30 @@ return array(
     //                ),
     //            ),
     //        ),
+    //
+    //        /*
+    //         * You can provide a wildcard along with configured HTTP methods within
+    //         * a route configuration in order to configure all non listed HTTP
+    //         * methods for this route.
+    //         */
+    //        'my-route-name' => array(
+    //            'get' => array(
+    //                'cache-control' => array(
+    //                    'override' => true,
+    //                    'value'    => 'public,
+    //                ),
+    //            ),
+    //            '*' => array(
+    //                'cache-control' => array(
+    //                    'override' => false,
+    //                    'value'    => 'private',
+    //                ),
+    //            ),
+    //        ),
+    //
+    //        /*
+    //         * Regular configuration.
+    //         */
     //        'home' => array( // router route name
     //            'get' => array( // Http method (wildcard '*' supported as whatever method)
     //                /*
@@ -53,9 +86,15 @@ return array(
     //        ),
     //    ),
     //
-    //    'enable' => true, // Whether to enable http cache
+    //    /*
+    //     * Whether to enable http cache.
+    //     */
+    //    'enable' => true,
     //
-    //    // Never cache these HTTP status codes. Defaults to all others than 200.
+    //    /*
+    //     * Never cache these HTTP status codes.
+    //     * Defaults to all others than 200.
+    //     */
     //    'http_codes_black_list' => array(),
     ),
 );
