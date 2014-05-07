@@ -2,8 +2,7 @@
 namespace ZF\HttpCache;
 
 use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
+use Zend\EventManager\AbstractListenerAggregate;
 use Zend\Http\Header;
 use Zend\Http\Headers;
 use Zend\Http\Request as HttpRequest;
@@ -15,10 +14,8 @@ use Zend\Mvc\MvcEvent;
  * data could be worse than not caching at all,
  * instructions disabling cache should always win.
  */
-class HttpCacheListener implements ListenerAggregateInterface
+class HttpCacheListener extends AbstractListenerAggregate
 {
-    use ListenerAggregateTrait;
-
     /**
      * @var array
      */
