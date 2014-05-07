@@ -1,7 +1,7 @@
 ZF Http Cache
 =============
 
-[![Build Status](https://travis-ci.org/zfcampus/zf-http-cache.png)](https://travis-ci.org/zfcampus/zf-http-cache)
+[![Build Status](https://travis-ci.org/corentin-larose/zf-http-cache.png)](https://travis-ci.org/corentin-larose/zf-http-cache)
 
 Introduction
 ------------
