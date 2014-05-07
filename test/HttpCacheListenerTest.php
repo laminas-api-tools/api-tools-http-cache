@@ -244,7 +244,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     public function setExpiresDataProvider()
     {
         $date = function ($seconds) {
-            $seconds += time();
+            $seconds += $_SERVER['REQUEST_TIME'];
             $date = new \DateTime("@{$seconds}", new \DateTimeZone('GMT'));
 
             return $date->format('D, d M Y H:i:s \G\M\T');
