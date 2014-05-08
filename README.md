@@ -63,7 +63,7 @@ Example:
 'zf-http-cache' => array(
     /* ... */
     'controllers' => array(
-        '<route-name>' => array(
+        '<controller>' => array(
             '<http-method>'  => array(
                 '<cache-header-name>' => array(
                     'override' => true,
@@ -76,9 +76,9 @@ Example:
 ),    
 ```
 
-##### Key: `<route-name>` 
+##### Key: `<controller>` 
 
-Either a route name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()`, case-sensitive) or a wildcard.
+Either a controller name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()->getParam('controller')`, case-sensitive) or a wildcard.
 A wildcard stands for all the non-specified controllers.
 
 ##### Key: `<http-method>` 
