@@ -45,7 +45,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'enable' => true,
-                    'controllers' => array(
+                    'routes' => array(
                         'foo' => array(
                             'get' => array(
                                 'expires' => array(
@@ -69,7 +69,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'enable' => true,
-                    'controllers' => array(
+                    'routes' => array(
                         'foo' => array(
                             '*' => array(
                                 'expires' => array(
@@ -93,7 +93,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'enable' => true,
-                    'controllers' => array(
+                    'routes' => array(
                         '*' => array(
                             'get' => array(
                                 'expires' => array(
@@ -117,7 +117,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'enable' => true,
-                    'controllers' => array(
+                    'routes' => array(
                         '*' => array(
                             '*' => array(
                                 'expires' => array(
@@ -141,7 +141,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'enable' => true,
-                    'controllers' => array(
+                    'routes' => array(
                         '*' => array(
                             '*' => array(
                                 'cache-control' => array(

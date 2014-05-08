@@ -52,17 +52,17 @@ The top-level configuration key for user configuration of this module is `zf-htt
 
 The `config/module.config.php` file contains a self-explanative example of configuration.
 
-#### Key: `controllers`
+#### Key: `routes`
 
-The `controllers` key is utilized for mapping a combination of a route and a HTTP method (see below) to a cache header configuration.
+The `routes` key is utilized for mapping a combination of a route and a HTTP method (see below) to a cache header configuration.
 
 Example:
 
 ```php
-// See the `config/application.config.php` for an complete commented example
+// See the `config/application.config.php` for a complete commented example
 'zf-http-cache' => array(
     /* ... */
-    'controllers' => array(
+    'routes' => array(
         '<route-name>' => array(
             '<http-method>'  => array(
                 '<cache-header-name>' => array(
