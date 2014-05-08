@@ -54,7 +54,7 @@ The `config/module.config.php` file contains a self-explanative example of confi
 
 #### Key: `controllers`
 
-The `controllers` key is utilized for mapping a combination of a route and a HTTP method (see below) to a cache header configuration.
+The `controllers` key is utilized for mapping a combination of a controller and a HTTP method (see below) to a cache header configuration.
 
 Example:
 

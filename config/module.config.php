@@ -15,7 +15,7 @@ return array(
     //         * override is set to false.
     //         *
     //         * All the responses for a non configured HTTP method within a
-    //         * configured route  will have the same behavior.
+    //         * configured controller will have the same behavior.
     //         */
     //        '*' => array( // No cache by default
     //    	      '*' => array(
@@ -28,10 +28,10 @@ return array(
     //
     //        /*
     //         * You can provide a wildcard along with configured HTTP methods within
-    //         * a route configuration in order to configure all non listed HTTP
-    //         * methods for this route.
+    //         * a controller configuration in order to configure all non listed HTTP
+    //         * methods for this controller.
     //         */
-    //        'my-route-name' => array(
+    //        'my-controller-name' => array(
     //            'get' => array(
     //                'cache-control' => array(
     //                    'override' => true,
@@ -49,7 +49,7 @@ return array(
     //        /*
     //         * Regular configuration.
     //         */
-    //        'home' => array( // router route name
+    //        'home' => array( // controller name
     //            'get' => array( // Http method (wildcard '*' supported as whatever method)
     //                /*
     //                 * General HTTP caching theory: http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
