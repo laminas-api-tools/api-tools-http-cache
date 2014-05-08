@@ -7,9 +7,9 @@ return array(
     ),
 
     'zf-http-cache' => array(
-    //    'routes' => array(
+    //    'controllers' => array(
     //        /*
-    //         * Wildcards: all the responses for the routes and HTTP methods others
+    //         * Wildcards: all the responses for the controllers and HTTP methods others
     //         * than those configured will have a Cache-control:private header
     //         * unless a Cache-control header has been sent by application, since
     //         * override is set to false.

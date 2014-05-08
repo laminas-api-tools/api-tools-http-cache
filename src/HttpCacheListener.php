@@ -116,8 +116,8 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
-        if (! empty($this->config['routes'])) {
-            $cacheConfig = $this->config['routes'];
+        if (! empty($this->config['controllers'])) {
+            $cacheConfig = $this->config['controllers'];
         } else {
             $this->cacheConfig = array();
 
