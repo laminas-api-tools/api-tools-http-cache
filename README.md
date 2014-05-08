@@ -93,7 +93,7 @@ A http cache header name (`Cache-control`, `Expires`, etc.).
 ##### Key: `<cache-header-value>`
 
 The value for the cache header. 
-As a rule of thumb, avoid as much as possible using anonymous functions since it prevent you from caching your configuration. 
+As a rule of thumb, avoid as much as possible using anonymous functions since it prevents you from caching your configuration. 
 
 ##### Key: `override`
 
