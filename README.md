@@ -48,6 +48,8 @@ Configuration
 
 ### User Configuration
 
+**As a rule of thumb, avoid as much as possible using anonymous functions since it prevents you from caching your configuration.** 
+
 The top-level configuration key for user configuration of this module is `zf-http-cache`.
 
 The `config/module.config.php` file contains a self-explanative example of configuration.
@@ -93,7 +95,6 @@ A http cache header name (`Cache-control`, `Expires`, etc.).
 ##### Key: `<cache-header-value>`
 
 The value for the cache header. 
-As a rule of thumb, avoid as much as possible using anonymous functions since it prevents you from caching your configuration. 
 
 ##### Key: `override`
 
@@ -101,7 +102,8 @@ Whether to override the cache headers possibly sent by your application.
 
 #### Key: `enable`
 
-The `enable` key is utilized for enabling/disabling the http cache module.
+The `enable` key is utilized for enabling/disabling the http cache module at run time.
+If you no longer need this module, rather consider removing the module from the `application.config.php` list.
 **Caution: when disabled, http cache module doesn't override/remove the cache headers sent by your application.**
 
 Example:
@@ -148,4 +150,4 @@ ZF2 Events
 
 #### `ZF\HttpCache\HttpCacheListener`
 
-This listener is attached to the `MvcEvent::EVENT_ROUTE` and `MvcEvent::EVENT_FINISH` events with priority `-1000`.
+This listener is attached to the `MvcEvent::EVENT_ROUTE` and `MvcEvent::EVENT_FINISH` events with the low priority of `-10000`.

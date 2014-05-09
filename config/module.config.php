@@ -9,10 +9,10 @@ return array(
     'zf-http-cache' => array(
     //    'controllers' => array(
     //        /*
-    //         * Wildcards: all the responses for the controllers and HTTP methods others
-    //         * than those configured will have a Cache-control:private header
-    //         * unless a Cache-control header has been sent by application, since
-    //         * override is set to false.
+    //         * Wildcards: in the example below all the responses for the controllers
+    //         * and HTTP methods others than those configured will have a
+    //         * Cache-control:private header unless a Cache-control header has been
+    //         * sent by application, since override is set to false.
     //         *
     //         * All the responses for a non configured HTTP method within a
     //         * configured controller will have the same behavior.
