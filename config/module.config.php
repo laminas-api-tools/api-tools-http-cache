@@ -96,5 +96,13 @@ return array(
     //     * Defaults to all others than 200.
     //     */
     //    'http_codes_black_list' => array(),
+    //
+    //    /*
+    //     * Delimiter used to mark a controller name as being a regexp.
+    //     * If you don't want to use regexps in your config set this
+    //     * to null to avoid inutil parsing.
+    //     * Regexp wins over wildcard.
+    //     */
+    //    'regex_delimiter' => '~',
     ),
 );

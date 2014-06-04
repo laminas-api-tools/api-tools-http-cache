@@ -129,6 +129,15 @@ class HttpCacheListener extends AbstractListenerAggregate
 
         if (! empty($cacheConfig[$controller])) {
             $controllerConfig = $cacheConfig[$controller];
+        } elseif (! empty($this->config['regex_delimiter'])) {
+            foreach ($cacheConfig as $key => $config) {
+                if (substr($key, 0, 1) === $this->config['regex_delimiter']) {
+                    if (preg_match($key, $controller)) {
+                        $controllerConfig = $config;
+                        break;
+                    }
+                }
+            }
         } elseif (! empty($cacheConfig['*'])) {
             $controllerConfig = $cacheConfig['*'];
         } else {

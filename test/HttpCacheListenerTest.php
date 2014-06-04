@@ -169,6 +169,64 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
+
+            array(
+                array(
+                    'enable' => true,
+                    'controllers' => array(
+                        '~[a-z]{3}~' => array(
+                            '*' => array(
+                                'cache-control' => array(
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ),
+                            ),
+                        ),
+                        '*' => array(
+                            'get' => array(
+                                'cache-control' => array(
+                                    'override' => true,
+                                    'value'    => 'public',
+                                ),
+                            ),
+                        ),
+                    ),
+                    'regex_delimiter' => '~',
+                ),
+                'head',
+                array('controller' => 'baz'),
+                array(
+                    'cache-control' => array(
+                        'override' => false,
+                        'value'    => 'private',
+                    ),
+                ),
+            ),
+
+            array(
+                array(
+                    'enable' => true,
+                    'controllers' => array(
+                        '~[a-z]{3}~' => array(
+                            '*' => array(
+                                'cache-control' => array(
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ),
+                            ),
+                        ),
+                    ),
+                    'regex_delimiter' => '~',
+                ),
+                'head',
+                array('controller' => 'baz'),
+                array(
+                    'cache-control' => array(
+                        'override' => false,
+                        'value'    => 'private',
+                    ),
+                ),
+            ),
         );
     }
 
