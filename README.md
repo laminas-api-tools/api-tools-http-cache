@@ -131,6 +131,28 @@ Example:
 ),
 ```
 
+#### Key: `regex_delimiter`
+
+This key is used to enable the evaluation of the <controller> key as a regular expression.
+It must contain the delimiter of the regular expression.
+**Caution: When this value is not empty and no litteral key corresponds to the current controller, a preg_match is used.**
+
+Example:
+
+```php
+'zf-http-cache' => array(
+    /* ... */
+    'regex_delimiter' => '~',
+    /* ... */
+    'controllers' => array(
+        '~.*~' => array( // Acts as a wildcard.
+            /* ... */
+        ),
+    ),
+    /* ... */
+),
+```
+
 ### System Configuration
 
 The following configuration is provided in `config/module.config.php`:
