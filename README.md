@@ -135,6 +135,9 @@ Example:
 
 This key is used to enable the evaluation of the <controller> key as a regular expression.
 It must contain the delimiter of the regular expression.
+If you don't want to use regular expression in your configuration set this to null to avoid inutil parsing.
+Regular expressions are tested in the very order they appear in the configuration, first matching wins.
+Regexp wins over wildcard.
 **Caution: When this value is not empty and no litteral key corresponds to the current controller, a preg_match is used.**
 
 Example:
