@@ -17,19 +17,4 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
     });
 
 return Symfony\CS\Config\Config::create()
-    ->fixers(array(
-        'controls_spaces',
-        'braces',
-        'elseif',
-        'eof_ending',
-        'function_declaration',
-        'include',
-        'indentation',
-        'linefeed',
-        'php_closing_tag',
-        'short_tag',
-        'trailing_spaces',
-        'unused_use',
-        'visibility',
-    ))
     ->finder($finder);
