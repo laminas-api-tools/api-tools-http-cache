@@ -1,4 +1,11 @@
 <phpunit bootstrap="./test/Bootstrap.php" colors="true">
+    <filter>
+        <blacklist>
+            <directory suffix=".php">vendor/</directory>
+            <directory suffix=".php">test/</directory>
+        </blacklist>
+    </filter>
+
     <testsuites>
         <testsuite name="ZF Http Cache Module Tests">
             <directory>./test</directory>

@@ -7,8 +7,6 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
         $path = $file->getPathname();
 
         switch (true) {
-            case (strrpos($path, '/test/Bootstrap.php')):
-                return false;
             case (strrpos($path, '/vendor/')):
                 return false;
             default:
