@@ -3,7 +3,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ZF\HttpCache\HttpCacheListener' => 'ZF\HttpCache\HttpCacheListenerFactory',
-        )
+        ),
     ),
 
     'zf-http-cache' => array(

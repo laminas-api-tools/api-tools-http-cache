@@ -399,7 +399,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                 array('Date' => $this->calculateDate(10)),
                 array(
                     'Date' => $this->calculateDate(10),
-                    'Expires' => $this->calculateDate(10)
+                    'Expires' => $this->calculateDate(10),
                 ),
             ),
         );
