@@ -14,6 +14,14 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $instance;
 
+    protected function calculateDate($seconds)
+    {
+        $seconds += $_SERVER['REQUEST_TIME'];
+        $date = new \DateTime("@{$seconds}", new \DateTimeZone('GMT'));
+
+        return $date->format('D, d M Y H:i:s \G\M\T');
+    }
+
     /**
      * @see checkStatusCode
      * @return array
@@ -263,7 +271,43 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function onResponseDataProvider()
     {
-        return array(array());
+        return array(
+            array(
+                array(
+                    'enable' => true,
+                    'controllers' => array(
+                        'foo' => array(
+                            'get' => array(
+                                'cache-control' => array(
+                                    'override' => true,
+                                    'value'    => 'max-age=86400, must-revalidate, public',
+                                ),
+                                'expires' => array(
+                                    'override' => true,
+                                    'value'    => 'Fri, 10 Oct 2014 20:44:35 GMT',
+                                ),
+                                'pragma' => array(
+                                    'override' => true,
+                                    'value'    => 'token',
+                                ),
+                                'vary' => array(
+                                    'override' => true,
+                                    'value'    => 'accept-encoding, x-requested-with',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                'get',
+                array('controller' => 'foo'),
+                array(
+                    'Expires'       => 'Fri, 10 Oct 2014 20:44:35 GMT',
+                    'Cache-Control' => 'max-age=86400, must-revalidate, public',
+                    'Pragma'        => 'token',
+                    'Vary'          => 'accept-encoding, x-requested-with',
+                ),
+            ),
+        );
     }
 
     /**
@@ -308,13 +352,6 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function setExpiresDataProvider()
     {
-        $date = function ($seconds) {
-            $seconds += $_SERVER['REQUEST_TIME'];
-            $date = new \DateTime("@{$seconds}", new \DateTimeZone('GMT'));
-
-            return $date->format('D, d M Y H:i:s \G\M\T');
-        };
-
         return array(
             array(
                 array('expires' => array(
@@ -322,23 +359,23 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     'value'    => '+1 day',
                 )),
                 array(),
-                array('Expires' => $date(86400)),
+                array('Expires' => $this->calculateDate(86400)),
             ),
             array(
                 array('expires' => array(
                     'override' => true,
                     'value'    => '+1 day',
                 )),
-                array('Expires' => $date(0)),
-                array('Expires' => $date(86400)),
+                array('Expires' => $this->calculateDate(0)),
+                array('Expires' => $this->calculateDate(86400)),
             ),
             array(
                 array('expires' => array(
                     'override' => false,
                     'value'    => '+1 day',
                 )),
-                array('Expires' => $date(0)),
-                array('Expires' => $date(0)),
+                array('Expires' => $this->calculateDate(0)),
+                array('Expires' => $this->calculateDate(0)),
             ),
 
             /*
@@ -352,17 +389,17 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     'value'    => 'junk-date',
                 )),
                 array(),
-                array('Expires' => $date(0)),
+                array('Expires' => $this->calculateDate(0)),
             ),
             array(
                 array('expires' => array(
                     'override' => true,
                     'value'    => 'junk-date',
                 )),
-                array('Date' => $date(10)),
+                array('Date' => $this->calculateDate(10)),
                 array(
-                    'Date' => $date(10),
-                    'Expires' => $date(10)
+                    'Date' => $this->calculateDate(10),
+                    'Expires' => $this->calculateDate(10)
                 ),
             ),
         );
@@ -480,10 +517,32 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \ZF\HttpCache\HttpCacheListener::onResponse
      * @dataProvider onResponseDataProvider
+     *
+     * @param array  $config
+     * @param string $method
+     * @param array  $routeMatch
+     * @param array  $exHeaders
      */
-    public function testOnResponse()
+    public function testOnResponse(array $config, $method, array $routeMatch, array $exHeaders)
     {
-        $this->markTestIncomplete();
+        $request = new HttpRequest();
+        $request->setMethod($method);
+
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch($routeMatch));
+
+        $response = new HttpResponse();
+        $event->setResponse($response);
+
+        $this->instance->setConfig($config);
+        $this->instance->onRoute($event);
+        $this->instance->onResponse($event);
+
+        $headers = $event->getResponse()
+            ->getHeaders();
+
+        $this->assertSame($exHeaders, $headers->toArray());
     }
 
     /**
