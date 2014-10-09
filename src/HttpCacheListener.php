@@ -37,16 +37,6 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * Checks whether there is a config for this HTTP method.
-     *
-     * @return boolean
-     */
-    public function hasCacheConfig()
-    {
-        return ! empty($this->cacheConfig);
-    }
-
-    /**
      * Checks whether to handle this status code.
      *
      * @param  HttpResponse $response
@@ -70,6 +60,16 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function getCacheConfig()
     {
         return $this->cacheConfig;
+    }
+
+    /**
+     * Checks whether there is a config for this HTTP method.
+     *
+     * @return boolean
+     */
+    public function hasCacheConfig()
+    {
+        return ! empty($this->cacheConfig);
     }
 
     /**

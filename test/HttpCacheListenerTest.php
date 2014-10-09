@@ -43,6 +43,13 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             ),
 
             array(
+                array('enable' => true),
+                'get',
+                array(),
+                array(),
+            ),
+
+            array(
                 array(
                     'enable' => true,
                     'controllers' => array(
@@ -480,7 +487,6 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::hasCacheConfig
      * @covers \ZF\HttpCache\HttpCacheListener::onRoute
      * @dataProvider configDataProvider
      *
@@ -549,7 +555,14 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->instance->setExpires($headers);
 
-        $this->assertSame($exHeaders, $headers->toArray());
+        $headers = $headers->toArray();
+
+        $this->assertArrayHasKey('Expires', $headers);
+
+        $date   = new \DateTime($headers['Expires']);
+        $exDate = new \DateTime($exHeaders['Expires']);
+
+        $this->assertEquals($exDate, $date, '', 2);
     }
 
     /**
