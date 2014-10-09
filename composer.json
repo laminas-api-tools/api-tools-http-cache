@@ -27,6 +27,7 @@
         "zendframework/zend-mvc": "~2.3"
     },
     "require-dev": {
+        "fabpot/php-cs-fixer": "*@dev",
         "phpunit/phpunit": "4.1.*",
         "zendframework/zend-loader": "~2.3"
     },
