@@ -12,14 +12,14 @@
         "process-timeout" : 3600
     }, 
     "description": "ZF2 Module providing http cache headers support",
-    "license": "BSD-3-Clause",
-    "name": "corentin-larose/zf-http-cache",   
     "keywords": [
         "zf2",
         "zend",
         "module",
         "cache"
     ],
+    "license": "BSD-3-Clause",
+    "name": "corentin-larose/zf-http-cache",
     "require": {
         "php": ">=5.3.23",
         "zendframework/zend-eventmanager": "~2.3",

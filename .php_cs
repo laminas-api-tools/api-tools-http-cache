@@ -7,7 +7,6 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
         $path = $file->getPathname();
 
         switch (true) {
-            case (strrpos($path, '/bin/')):
             case (strrpos($path, '/vendor/')):
                 return false;
             default:
