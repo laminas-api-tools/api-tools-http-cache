@@ -9,6 +9,7 @@
         ]
     },
     "config": {
+        "bin-dir" : "vendor/bin",
         "process-timeout" : 3600
     }, 
     "description": "ZF2 Module providing http cache headers support",
