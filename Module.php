@@ -21,10 +21,7 @@ class Module
         return include __DIR__.'/config/module.config.php';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onBootstrap($e)
+    public function onBootstrap(\Zend\Mvc\MvcEvent $e)
     {
         $app = $e->getApplication();
         $em  = $app->getEventManager();
