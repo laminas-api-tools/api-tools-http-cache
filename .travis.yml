@@ -4,6 +4,13 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - 5.6
+  - hhvm
+
+matrix: 
+  allow_failures:
+    - php: hhvm
+
 
 before_script:
   - composer self-update
@@ -14,5 +21,5 @@ script:
   - ./vendor/bin/php-cs-fixer -v fix . --dry-run --config-file ./.php_cs
 
 notifications:
-  irc: false
+  irc: "irc.freenode.org#apigility-dev"
   email: false

@@ -1,12 +1,16 @@
 {    
     "autoload": {
         "psr-4": {
-            "ZF\\HttpCache\\": "src/",
-            "ZFTest\\HttpCache\\": "test/"
+            "ZF\\HttpCache\\": "src/"
         },
         "classmap": [
             "Module.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZFTest\\HttpCache\\": "test/"
+        }
     },
     "config": {
         "bin-dir" : "vendor/bin",
@@ -14,13 +18,25 @@
     }, 
     "description": "ZF2 Module providing http cache headers support",
     "keywords": [
+        "api",
+        "apigility",
         "zf2",
         "zend",
         "module",
         "cache"
     ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev",
+            "dev-develop": "1.1-dev"
+        }
+    },
+    "homepage": "http://apigility.org/",
     "license": "BSD-3-Clause",
-    "name": "corentin-larose/zf-http-cache",
+    "name": "zfcampus/zf-http-cache",
+    "repositories": [
+        { "type": "composer", "url": "https://packages.zendframework.com" }
+    ],
     "require": {
         "php": ">=5.3.23",
         "zendframework/zend-eventmanager": "~2.3",
@@ -28,9 +44,15 @@
         "zendframework/zend-mvc": "~2.3"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "*@dev",
+        "fabpot/php-cs-fixer": "~1.0",
         "phpunit/phpunit": "4.1.*",
         "zendframework/zend-loader": "~2.3"
+    },
+    "support": {
+        "email": "apigility-users@zend.com",
+        "irc": "irc://irc.freenode.net/apigility",
+        "source": "https://github.com/zfcampus/zf-http-cache",
+        "issues": "https://github.com/zfcampus/zf-http-cache/issues"
     },
     "type": "library"
 }
