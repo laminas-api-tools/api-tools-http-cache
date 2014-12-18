@@ -1,7 +1,7 @@
 ZF Http Cache
 =============
 
-[![Build Status](https://travis-ci.org/corentin-larose/zf-http-cache.png)](https://travis-ci.org/corentin-larose/zf-http-cache)
+[![Build Status](https://travis-ci.org/zfcampus/zf-http-cache.png)](https://travis-ci.org/zfcampus/zf-http-cache)
 
 Introduction
 ------------
@@ -15,14 +15,14 @@ Installation
 Run the following `composer` command:
 
 ```console
-$ composer require "corentin-larose/zf-http-cache:dev-master"
+$ composer require "zfcampus/zf-http-cache:~1.0-dev@dev"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "corentin-larose/zf-http-cache": "dev-master"
+    "zfcampus/zf-http-cache": "~1.0-dev@dev"
 }
 ```
 
@@ -81,11 +81,13 @@ Example:
 ##### Key: `<controller>` 
 
 Either a controller name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()->getParam('controller')`, case-sensitive) or a wildcard.
+
 A wildcard stands for all the non-specified controllers.
 
 ##### Key: `<http-method>` 
 
 Either a lower cased HTTP method (`get`, `post`, etc.) (as returned by `Zend\Http\Request::getMethod()`) or a wildcard.
+
 A wildcard stands for all the non-specified HTTP methods.
 
 ##### Key: `<cache-header-name>` 
@@ -103,7 +105,9 @@ Whether to override the cache headers possibly sent by your application.
 #### Key: `enable`
 
 The `enable` key is utilized for enabling/disabling the http cache module at run time.
+
 If you no longer need this module, rather consider removing the module from the `application.config.php` list.
+
 **Caution: when disabled, http cache module doesn't override/remove the cache headers sent by your application.**
 
 Example:
@@ -134,10 +138,15 @@ Example:
 #### Key: `regex_delimiter`
 
 This key is used to enable the evaluation of the <controller> key as a regular expression.
+
 It must contain the delimiter of the regular expression.
+
 If you don't want to use regular expression in your configuration set this to null to avoid inutil parsing.
+
 Regular expressions are tested in the very order they appear in the configuration, first matching wins.
+
 Regexp wins over wildcard.
+
 **Caution: When this value is not empty and no litteral key corresponds to the current controller, a preg_match is used.**
 
 Example:
