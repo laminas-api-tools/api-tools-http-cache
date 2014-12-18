@@ -23,3 +23,5 @@ script:
 notifications:
   irc: "irc.freenode.org#apigility-dev"
   email: false
+
+sudo: false
