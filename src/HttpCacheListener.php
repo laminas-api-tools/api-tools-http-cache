@@ -184,12 +184,13 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     public function setCacheControl(Headers $headers)
     {
-        if (
-            ! empty($this->cacheConfig['cache-control']['value'])
-            and (! $headers->has('cache-control')
+        if (! empty($this->cacheConfig['cache-control']['value'])
+            && (! $headers->has('cache-control')
             || ! empty($this->cacheConfig['cache-control']['override']))
         ) {
-            $cacheControl = Header\CacheControl::fromString("Cache-Control: {$this->cacheConfig['cache-control']['value']}");
+            $cacheControl = Header\CacheControl::fromString(
+                "Cache-Control: {$this->cacheConfig['cache-control']['value']}"
+            );
             $headers->addHeader($cacheControl);
         }
 
@@ -215,8 +216,7 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     public function setExpires(Headers $headers)
     {
-        if (
-            ! empty($this->cacheConfig['expires']['value'])
+        if (! empty($this->cacheConfig['expires']['value'])
             and (! $headers->has('expires')
             || ! empty($this->cacheConfig['expires']['override']))
         ) {
@@ -244,8 +244,7 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     public function setPragma(Headers $headers)
     {
-        if (
-            ! empty($this->cacheConfig['pragma']['value'])
+        if (! empty($this->cacheConfig['pragma']['value'])
             and (! $headers->has('pragma')
             || ! empty($this->cacheConfig['pragma']['override']))
         ) {
@@ -262,8 +261,7 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     public function setVary(Headers $headers)
     {
-        if (
-            ! empty($this->cacheConfig['vary']['value'])
+        if (! empty($this->cacheConfig['vary']['value'])
             and (! $headers->has('vary')
             || ! empty($this->cacheConfig['vary']['override']))
         ) {
