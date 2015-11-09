@@ -27,6 +27,6 @@ class Module
         $em  = $app->getEventManager();
         $sm  = $app->getServiceManager();
 
-        $em->attachAggregate($sm->get(\ZF\HttpCache\HttpCacheListener::class));
+        $sm->get(\ZF\HttpCache\HttpCacheListener::class)->attach($em);
     }
 }
