@@ -1,8 +1,11 @@
 <?php
+use ZF\HttpCache\HttpCacheListener;
+use ZF\HttpCache\HttpCacheListenerFactory;
+
 return [
     'service_manager' => [
         'factories' => [
-            \ZF\HttpCache\HttpCacheListener::class => \ZF\HttpCache\HttpCacheListenerFactory::class,
+            HttpCacheListener::class => HttpCacheListenerFactory::class,
         ],
     ],
 

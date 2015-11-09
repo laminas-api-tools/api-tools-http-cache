@@ -511,7 +511,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     {
         $ret = call_user_func_array([$this->instance, $method], $args);
 
-        $this->assertInstanceOf(\ZF\HttpCache\HttpCacheListener::class, $ret);
+        $this->assertInstanceOf(HttpCacheListener::class, $ret);
     }
 
     /**
