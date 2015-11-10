@@ -1,4 +1,11 @@
 {    
+    "authors": [
+        {
+            "homepage": "https://github.com/corentin-larose/",
+            "name": "Corentin Larose",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "ZF\\HttpCache\\": "src/"
@@ -38,15 +45,15 @@
         { "type": "composer", "url": "https://packages.zendframework.com" }
     ],
     "require": {
-        "php": ">=5.3.23",
-        "zendframework/zend-eventmanager": ">=2.3,<2.5",
-        "zendframework/zend-http": ">=2.3,<2.5",
-        "zendframework/zend-mvc": ">=2.3,<2.5"
+        "php": "^5.5|^7.0",
+        "zendframework/zend-eventmanager": "~2.5",
+        "zendframework/zend-http": "~2.5",
+        "zendframework/zend-loader": "~2.5",
+        "zendframework/zend-mvc": "~2.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.7",
-        "squizlabs/php_codesniffer": "^2.3",
-        "zendframework/zend-loader": ">=2.3,<2.5"
+        "squizlabs/php_codesniffer": "^2.3.1"
     },
     "support": {
         "email": "apigility-users@zend.com",
