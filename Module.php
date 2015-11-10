@@ -1,6 +1,8 @@
 <?php
 namespace ZF\HttpCache;
 
+use Zend\Loader\StandardAutoloader;
+
 class Module
 {
     /**
@@ -8,7 +10,7 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return [Zend\Loader\StandardAutoloader::class => ['namespaces' => [
+        return [StandardAutoloader::class => ['namespaces' => [
             __NAMESPACE__ => __DIR__.'/src/',
         ]]];
     }
