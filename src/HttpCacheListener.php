@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
+ */
+
 namespace ZF\HttpCache;
 
 use Zend\EventManager\EventManagerInterface;
@@ -116,15 +121,14 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
-        if (! empty($this->config['controllers'])) {
-            $cacheConfig = $this->config['controllers'];
-        } else {
+        if (empty($this->config['controllers'])) {
             $this->cacheConfig = [];
-
             return;
         }
 
-        $controller = $e->getRouteMatch()
+        $cacheConfig = $this->config['controllers'];
+        $controller  = $e
+            ->getRouteMatch()
             ->getParam('controller');
 
         if (! empty($cacheConfig[$controller])) {
@@ -142,7 +146,6 @@ class HttpCacheListener extends AbstractListenerAggregate
             $controllerConfig = $cacheConfig['*'];
         } else {
             $this->cacheConfig = [];
-
             return;
         }
 
@@ -158,7 +161,6 @@ class HttpCacheListener extends AbstractListenerAggregate
             $methodConfig = $cacheConfig['*']['*'];
         } else {
             $this->cacheConfig = [];
-
             return;
         }
 
@@ -174,7 +176,6 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setCacheConfig(array $cacheConfig)
     {
         $this->cacheConfig = $cacheConfig;
-
         return $this;
     }
 
@@ -186,7 +187,8 @@ class HttpCacheListener extends AbstractListenerAggregate
     {
         if (! empty($this->cacheConfig['cache-control']['value'])
             && (! $headers->has('cache-control')
-            || ! empty($this->cacheConfig['cache-control']['override']))
+                || ! empty($this->cacheConfig['cache-control']['override'])
+            )
         ) {
             $cacheControl = Header\CacheControl::fromString(
                 "Cache-Control: {$this->cacheConfig['cache-control']['value']}"
@@ -206,7 +208,6 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setConfig(array $config)
     {
         $this->config = $config;
-
         return $this;
     }
 
@@ -217,18 +218,17 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setExpires(Headers $headers)
     {
         if (! empty($this->cacheConfig['expires']['value'])
-            and (! $headers->has('expires')
-            || ! empty($this->cacheConfig['expires']['override']))
+            && (! $headers->has('expires')
+                || ! empty($this->cacheConfig['expires']['override'])
+            )
         ) {
             $expires = new Header\Expires();
             try {
                 $expires->setDate($this->cacheConfig['expires']['value']);
-            } catch (\Zend\Http\Header\Exception\InvalidArgumentException $e) {
-                if ($headers->has('date')) {
-                    $date = $headers->get('date')->date();
-                } else {
-                    $date = "@{$_SERVER['REQUEST_TIME']}";
-                }
+            } catch (Header\Exception\InvalidArgumentException $e) {
+                $date = $headers->has('date')
+                    ? $headers->get('date')->date()
+                    : sprintf('@%s', $_SERVER['REQUEST_TIME']);
                 $expires->setDate($date);
             }
 
@@ -245,8 +245,9 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setPragma(Headers $headers)
     {
         if (! empty($this->cacheConfig['pragma']['value'])
-            and (! $headers->has('pragma')
-            || ! empty($this->cacheConfig['pragma']['override']))
+            && (! $headers->has('pragma')
+                || ! empty($this->cacheConfig['pragma']['override'])
+            )
         ) {
             $pragma = new Header\Pragma($this->cacheConfig['pragma']['value']);
             $headers->addHeader($pragma);
@@ -262,8 +263,9 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setVary(Headers $headers)
     {
         if (! empty($this->cacheConfig['vary']['value'])
-            and (! $headers->has('vary')
-            || ! empty($this->cacheConfig['vary']['override']))
+            && (! $headers->has('vary')
+                || ! empty($this->cacheConfig['vary']['override'])
+            )
         ) {
             $vary = new Header\Vary($this->cacheConfig['vary']['value']);
             $headers->addHeader($vary);
