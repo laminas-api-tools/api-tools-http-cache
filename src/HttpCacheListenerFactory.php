@@ -1,20 +1,27 @@
 <?php
+/**
+ * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
+ */
+
 namespace ZF\HttpCache;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-class HttpCacheListenerFactory implements FactoryInterface
+class HttpCacheListenerFactory
 {
     /**
-     * @param  ServiceLocatorInterface $services
+     * Factory for producing an HttpCacheListener.
+     *
+     * Duck-types on the $container type to allow usage with
+     * zend-servicemanager versions 2.5+ and 3.0+.
+     *
+     * @param  \Interop\Container\ContainerInterface|\Zend\ServiceManagerServiceLocatorInterface $container
      * @return HttpCacheListener
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService($container)
     {
         $config = [];
-        if ($serviceLocator->has('Config')) {
-            $config = $serviceLocator->get('Config');
+        if ($container->has('config')) {
+            $config = $container->get('config');
             if (isset($config['zf-http-cache'])) {
                 $config = $config['zf-http-cache'];
             }

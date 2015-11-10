@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.1 - TBD
+## 1.2.1 - 2015-11-10
 
 ### Added
 
@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#5](https://github.com/zfcampus/zf-http-cache/pull/5) fixes missing imports,
+  and ensures all code files have appropriate file-level license docblocks.
 
 ## 1.2.0 - 2015-11-10
 
