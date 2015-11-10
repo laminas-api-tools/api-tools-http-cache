@@ -1,4 +1,11 @@
 {    
+    "authors": [
+        {
+            "homepage": "https://github.com/corentin-larose/",
+            "name": "Corentin Larose",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "ZF\\HttpCache\\": "src/"
