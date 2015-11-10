@@ -5,6 +5,7 @@ language: php
 cache:
   directories:
     - $HOME/.composer/cache
+    - vendor
 
 matrix:
   fast_finish: true
@@ -31,6 +32,7 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs --prefer-source
+  - composer info -i
 
 script:
   - ./vendor/bin/phpunit
