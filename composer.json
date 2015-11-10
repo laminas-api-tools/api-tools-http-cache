@@ -45,15 +45,15 @@
         { "type": "composer", "url": "https://packages.zendframework.com" }
     ],
     "require": {
-        "php": ">=5.5",
-        "zendframework/zend-eventmanager": "~2.3",
-        "zendframework/zend-http": "~2.3",
-        "zendframework/zend-mvc": "~2.3"
+        "php": "^5.5|^7.0",
+        "zendframework/zend-eventmanager": "~2.5",
+        "zendframework/zend-http": "~2.5",
+        "zendframework/zend-mvc": "~2.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.7",
         "squizlabs/php_codesniffer": "^2.3.1",
-        "zendframework/zend-loader": "~2.3"
+        "zendframework/zend-loader": "~2.5"
     },
     "support": {
         "email": "apigility-users@zend.com",
