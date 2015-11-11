@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 1.2.2 - TBD
+## 1.2.2 - 2015-11-11
 
 ### Added
 
@@ -36,7 +36,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#6](https://github.com/zfcampus/zf-http-cache/pull/6) fixes the
+  `HttpCacheListenerFactory` to rename the `createService()` to `__invoke()`,
+  as originally intended in #4.
 
 ## 1.2.1 - 2015-11-10
 
