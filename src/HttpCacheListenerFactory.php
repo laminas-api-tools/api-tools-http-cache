@@ -17,7 +17,7 @@ class HttpCacheListenerFactory
      * @param  \Interop\Container\ContainerInterface|\Zend\ServiceManagerServiceLocatorInterface $container
      * @return HttpCacheListener
      */
-    public function createService($container)
+    public function __invoke($container)
     {
         $config = [];
         if ($container->has('config')) {
