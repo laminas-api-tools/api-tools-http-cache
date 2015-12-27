@@ -63,7 +63,7 @@ return [
     //                 * General HTTP caching theory: http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
     //                 * Apache point of view: http://httpd.apache.org/docs/current/mod/mod_proxy.html
     //                 * NginX point of view: http://nginx.org/en/docs/http/ngx_http_proxy_module.html
-    //                 * Varnish point of view: https://www.varnish-software.com/static/book/HTTP.html
+    //                 * Varnish point of view: https://www.varnish-software.com/book/4.0/chapters/HTTP.html
     //                 */
     //
     //                // Cache-Control: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
