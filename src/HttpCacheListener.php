@@ -186,8 +186,8 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setCacheControl(Headers $headers)
     {
         if (! empty($this->cacheConfig['cache-control']['value'])
-            && (! $headers->has('cache-control')
-                || ! empty($this->cacheConfig['cache-control']['override'])
+            && (! empty($this->cacheConfig['cache-control']['override'])
+                || ! $headers->has('cache-control')
             )
         ) {
             $cacheControl = Header\CacheControl::fromString(
@@ -218,8 +218,8 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setExpires(Headers $headers)
     {
         if (! empty($this->cacheConfig['expires']['value'])
-            && (! $headers->has('expires')
-                || ! empty($this->cacheConfig['expires']['override'])
+            && (! empty($this->cacheConfig['expires']['override'])
+                || ! $headers->has('expires')
             )
         ) {
             $expires = new Header\Expires();
@@ -245,8 +245,8 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setPragma(Headers $headers)
     {
         if (! empty($this->cacheConfig['pragma']['value'])
-            && (! $headers->has('pragma')
-                || ! empty($this->cacheConfig['pragma']['override'])
+            && (! empty($this->cacheConfig['pragma']['override'])
+                || ! $headers->has('pragma')
             )
         ) {
             $pragma = new Header\Pragma($this->cacheConfig['pragma']['value']);
@@ -263,8 +263,8 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setVary(Headers $headers)
     {
         if (! empty($this->cacheConfig['vary']['value'])
-            && (! $headers->has('vary')
-                || ! empty($this->cacheConfig['vary']['override'])
+            && (! empty($this->cacheConfig['vary']['override'])
+                || ! $headers->has('vary')
             )
         ) {
             $vary = new Header\Vary($this->cacheConfig['vary']['value']);
