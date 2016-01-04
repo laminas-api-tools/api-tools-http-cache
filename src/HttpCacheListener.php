@@ -97,13 +97,19 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
+
+        /** @var $request HttpRequest */
+        $request = $e->getRequest();
+
         /* @var $headers Headers */
         $headers = $response->getHeaders();
 
         $this->setExpires($headers)
+            ->setEtag($headers, $response)
             ->setCacheControl($headers)
             ->setPragma($headers)
-            ->setVary($headers);
+            ->setVary($headers)
+            ->setNotModified($request, $response);
     }
 
     /**
@@ -126,7 +132,7 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
-        $cacheConfig = $this->config['controllers'];
+            $cacheConfig = $this->config['controllers'];
         $controller  = $e
             ->getRouteMatch()
             ->getParam('controller');
@@ -269,6 +275,46 @@ class HttpCacheListener extends AbstractListenerAggregate
         ) {
             $vary = new Header\Vary($this->cacheConfig['vary']['value']);
             $headers->addHeader($vary);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Headers $headers
+     * @param HttpResponse $response
+     * @return $this
+     */
+    public function setEtag(Headers $headers, HttpResponse $response)
+    {
+        if ( ! empty($this->cacheConfig['etag'])
+            && (! $headers->has('etag')
+                || ! empty($this->cacheConfig['etag']['override']))
+        ) {
+            $etag = new Header\Etag(md5($response->getContent()));
+            $headers->addHeader($etag);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @param HttpResponse $response
+     * @return $this
+     */
+    public function setNotModified(HttpRequest $request, HttpResponse $response)
+    {
+        if (!$request->getHeaders()->has('Etag')) {
+            return $this;
+        }
+
+        $requestEtag =  $request->getHeaders()->get('Etag')->getFieldValue();
+        $responseEtag =  $response->getHeaders()->get('Etag')->getFieldValue();
+
+        if ($requestEtag == $responseEtag || $requestEtag == '*') {
+            $response->setStatusCode(304);
+            $response->setContent(null);
         }
 
         return $this;

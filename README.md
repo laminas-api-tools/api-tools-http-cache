@@ -92,7 +92,7 @@ A wildcard stands for all the non-specified HTTP methods.
 
 ##### Key: `<cache-header-name>` 
 
-A http cache header name (`Cache-control`, `Expires`, etc.).
+A http cache header name (`cache-control`, `expires`, `etag` etc.).
 
 ##### Key: `<cache-header-value>`
 

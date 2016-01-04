@@ -475,6 +475,38 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
+     * @see testSetETag
+     * @return array
+     */
+    public function setETagDataProvider()
+    {
+        return [
+            [
+                ['etag' => [
+                    'override' => true
+                ]],
+                [],
+                ['Etag' => md5('')],
+            ],
+            [
+                ['vary' => [
+                    'override' => false
+                ]],
+                ['Etag' => '1234'],
+                ['Etag' => '1234'],
+            ],
+            [
+                ['etag' => [
+                    'override' => true
+                ]],
+                ['Etag' => '1234'],
+                ['Etag' => md5('')],
+            ],
+        ];
+    }
+
     public function setUp()
     {
         $this->instance = new HttpCacheListener();
@@ -665,4 +697,27 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($exHeaders, $headers->toArray());
     }
+
+
+    /**
+     * @covers \ZF\HttpCache\HttpCacheListener::setvary
+     * @dataProvider setEtagDataProvider
+     *
+     * @param array $cacheConfig
+     * @param array $headers
+     * @param array $exHeaders
+     */
+    public function testSetETag(array $cacheConfig, array $headers, array $exHeaders)
+    {
+        $this->instance->setCacheConfig($cacheConfig);
+
+        $response = new HttpResponse();
+        $headers  = $response->getHeaders()
+            ->addHeaders($headers);
+
+        $this->instance->setEtag($headers, $response);
+
+        $this->assertSame($exHeaders, $headers->toArray());
+    }
+
 }
