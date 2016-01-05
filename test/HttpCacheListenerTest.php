@@ -719,5 +719,4 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($exHeaders, $headers->toArray());
     }
-
 }
