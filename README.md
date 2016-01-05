@@ -15,14 +15,14 @@ Installation
 Run the following `composer` command:
 
 ```console
-$ composer require "zfcampus/zf-http-cache:~1.0-dev@dev"
+$ composer require "zfcampus/zf-http-cache:^1.0"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "zfcampus/zf-http-cache": "~1.0-dev@dev"
+    "zfcampus/zf-http-cache": "^1.0"
 }
 ```
 
