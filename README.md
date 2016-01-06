@@ -94,6 +94,36 @@ A wildcard stands for all the non-specified HTTP methods.
 
 A http cache header name (`cache-control`, `expires`, `etag` etc.).
 
+###### ETags
+
+For Etags you can specify a custom generator in the configuration:
+
+```
+'etag' => array(
+    'override' => true,
+    'generator' => 'Your\Own\EtagGenerator'
+)
+```
+
+Example generator:
+
+```
+class EtagGenerator implements EtagGeneratorInterface
+{
+    /**
+     * Returns an ETag for the given response.
+     *
+     * @param HttpResponse $response
+     * @return string Etag
+     */
+    public function generateEtag(HttpResponse $response)
+    {
+        return md5($response->getContent());
+    }
+}
+```
+
+
 ##### Key: `<cache-header-value>`
 
 The value for the cache header. 
