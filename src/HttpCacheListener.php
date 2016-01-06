@@ -6,6 +6,7 @@
 
 namespace ZF\HttpCache;
 
+use Interop\Container\ContainerInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\Http\Header;
@@ -30,6 +31,19 @@ class HttpCacheListener extends AbstractListenerAggregate
      * @var array
      */
     protected $config = [];
+
+    /** @var ContainerInterface */
+    protected $container;
+
+    /**
+     * HttpCacheListener constructor.
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct($container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * @param EventManagerInterface $events
@@ -132,7 +146,7 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
-            $cacheConfig = $this->config['controllers'];
+        $cacheConfig = $this->config['controllers'];
         $controller  = $e
             ->getRouteMatch()
             ->getParam('controller');
@@ -291,7 +305,7 @@ class HttpCacheListener extends AbstractListenerAggregate
             && (! $headers->has('etag')
                 || ! empty($this->cacheConfig['etag']['override']))
         ) {
-            $etag = new Header\Etag(md5($response->getContent()));
+            $etag = new Header\Etag($this->generateEtag($response));
             $headers->addHeader($etag);
         }
 
@@ -309,8 +323,8 @@ class HttpCacheListener extends AbstractListenerAggregate
             return $this;
         }
 
-        $requestEtag =  $request->getHeaders()->get('Etag')->getFieldValue();
-        $responseEtag =  $response->getHeaders()->get('Etag')->getFieldValue();
+        $requestEtag = $request->getHeaders()->get('Etag')->getFieldValue();
+        $responseEtag = $response->getHeaders()->get('Etag')->getFieldValue();
 
         if ($requestEtag == $responseEtag || $requestEtag == '*') {
             $response->setStatusCode(304);
@@ -318,5 +332,28 @@ class HttpCacheListener extends AbstractListenerAggregate
         }
 
         return $this;
+    }
+
+    /**
+     * Generates an Etag based on the response.
+     *
+     * @param HttpResponse $response
+     * @return string Etag
+     */
+    protected function generateEtag(HttpResponse $response)
+    {
+        $generator = new DefaultEtagGenerator();
+
+        // Use custom generator.
+        if (!empty($this->container)
+            && !empty($this->cacheConfig['etag']['generator'])
+            && $this->container->has($this->cacheConfig['etag']['generator'])
+            && $this->container->get($this->cacheConfig['etag']['generator']) instanceof EtagGeneratorInterface
+        ) {
+            $generator = $this->container
+                ->get($this->cacheConfig['etag']['generator']);
+        }
+
+        return $generator->generateEtag($response);
     }
 }
