@@ -105,23 +105,7 @@ For Etags you can specify a custom generator in the configuration:
 )
 ```
 
-Example generator:
-
-```
-class EtagGenerator implements EtagGeneratorInterface
-{
-    /**
-     * Returns an ETag for the given response.
-     *
-     * @param HttpResponse $response
-     * @return string Etag
-     */
-    public function generateEtag(HttpResponse $response)
-    {
-        return md5($response->getContent());
-    }
-}
-```
+A generator example can be found in `\ZF\HttpCache\DefaultEtagGenerator`. 
 
 
 ##### Key: `<cache-header-value>`
