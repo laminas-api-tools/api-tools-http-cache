@@ -119,7 +119,7 @@ class HttpCacheListener extends AbstractListenerAggregate
         $headers = $response->getHeaders();
 
         $this->setExpires($headers)
-            ->setEtag($headers, $response)
+            ->setEtag($request, $response)
             ->setCacheControl($headers)
             ->setPragma($headers)
             ->setVary($headers)
@@ -295,17 +295,18 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param Headers $headers
+     * @param HttpRequest $request
      * @param HttpResponse $response
      * @return $this
      */
-    public function setEtag(Headers $headers, HttpResponse $response)
+    public function setEtag(HttpRequest $request, HttpResponse $response)
     {
+        $headers = $response->getHeaders();
         if (! empty($this->cacheConfig['etag'])
             && (! $headers->has('etag')
                 || ! empty($this->cacheConfig['etag']['override']))
         ) {
-            $etag = new Header\Etag($this->generateEtag($response));
+            $etag = new Header\Etag($this->generateEtag($request, $response));
             $headers->addHeader($etag);
         }
 
@@ -338,10 +339,11 @@ class HttpCacheListener extends AbstractListenerAggregate
     /**
      * Generates an Etag based on the response.
      *
+     * @param HttpRequest $request
      * @param HttpResponse $response
      * @return string Etag
      */
-    protected function generateEtag(HttpResponse $response)
+    protected function generateEtag(HttpRequest $request, HttpResponse $response)
     {
         $generator = new DefaultEtagGenerator();
 
@@ -355,6 +357,6 @@ class HttpCacheListener extends AbstractListenerAggregate
                 ->get($this->cacheConfig['etag']['generator']);
         }
 
-        return $generator->generateEtag($response);
+        return $generator->generateEtag($request, $response);
     }
 }
