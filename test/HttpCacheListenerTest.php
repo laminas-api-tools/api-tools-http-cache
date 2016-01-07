@@ -510,6 +510,31 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @see testSetNotModified
+     * @return array
+     */
+    public function setNotModifiedDataProvider()
+    {
+        return [
+            [
+                [],
+                ['Etag' => '123'],
+                200,
+            ],
+            [
+                ['If-Match' => '1234'],
+                ['Etag' => '1234'],
+                304,
+            ],
+            [
+                ['If-Match' => '1234'],
+                ['Etag' => 'something-else'],
+                200
+            ],
+        ];
+    }
+
     public function setUp()
     {
         $this->instance = new HttpCacheListener();
@@ -746,5 +771,27 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $httpCacheListener->setEtag($headers, $response);
 
         $this->assertSame(['Etag' => 'generated'], $headers->toArray());
+    }
+
+    /**
+     * @covers       \ZF\HttpCache\HttpCacheListener::setvary
+     * @dataProvider setNotModifiedDataProvider
+     *
+     * @param array $requestHeaders
+     * @param array $responseHeaders
+     * @param array $exStatusCode
+     * @internal param array $cacheConfig
+     */
+    public function testSetNotModified(array $requestHeaders, array $responseHeaders, $exStatusCode)
+    {
+        $request = new HttpRequest();
+        $request->getHeaders()->addHeaders($requestHeaders);
+
+        $response = new HttpResponse();
+        $response->getHeaders()->addHeaders($responseHeaders);
+
+        $this->instance->setNotModified($request, $response);
+
+        $this->assertSame($exStatusCode, $response->getStatusCode());
     }
 }

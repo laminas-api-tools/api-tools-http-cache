@@ -319,14 +319,15 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     public function setNotModified(HttpRequest $request, HttpResponse $response)
     {
-        if (!$request->getHeaders()->has('Etag')) {
+        if (!$request->getHeaders()->has('If-Match') || !$response->getHeaders()->has('Etag')) {
             return $this;
         }
 
-        $requestEtag = $request->getHeaders()->get('Etag')->getFieldValue();
+        $requestEtags = $request->getHeaders()->get('If-Match')->getFieldValue();
+        $requestEtags = !is_array($requestEtags) ? [$requestEtags] : $requestEtags;
         $responseEtag = $response->getHeaders()->get('Etag')->getFieldValue();
 
-        if ($requestEtag == $responseEtag || $requestEtag == '*') {
+        if (in_array($responseEtag, $requestEtags) || in_array('*', $requestEtags)) {
             $response->setStatusCode(304);
             $response->setContent(null);
         }
