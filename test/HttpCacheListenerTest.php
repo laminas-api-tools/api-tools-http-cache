@@ -523,12 +523,12 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                 200,
             ],
             [
-                ['If-Match' => '1234'],
+                ['If-None-Match' => '1234'],
                 ['Etag' => '1234'],
                 304,
             ],
             [
-                ['If-Match' => '1234'],
+                ['If-None-Match' => '1234'],
                 ['Etag' => 'something-else'],
                 200
             ],
