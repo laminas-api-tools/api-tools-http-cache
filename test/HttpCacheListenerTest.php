@@ -733,7 +733,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setEtag
+     * @covers \ZF\HttpCache\HttpCacheListener::setETag
      * @dataProvider setEtagDataProvider
      *
      * @param array $cacheConfig
@@ -748,7 +748,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $headers  = $response->getHeaders()
             ->addHeaders($headers);
 
-        $this->instance->setEtag(new HttpRequest(), $response);
+        $this->instance->setETag(new HttpRequest(), $response);
 
         $this->assertSame($exHeaders, $headers->toArray());
     }
@@ -773,7 +773,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $response = new HttpResponse();
         $headers  = $response->getHeaders();
 
-        $httpCacheListener->setEtag(new HttpRequest(), $response);
+        $httpCacheListener->setETag(new HttpRequest(), $response);
 
         $this->assertSame(['Etag' => 'generated'], $headers->toArray());
     }

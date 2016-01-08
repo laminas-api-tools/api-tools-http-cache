@@ -119,7 +119,7 @@ class HttpCacheListener extends AbstractListenerAggregate
         $headers = $response->getHeaders();
 
         $this->setExpires($headers)
-            ->setEtag($request, $response)
+            ->setETag($request, $response)
             ->setCacheControl($headers)
             ->setPragma($headers)
             ->setVary($headers)
@@ -299,7 +299,7 @@ class HttpCacheListener extends AbstractListenerAggregate
      * @param HttpResponse $response
      * @return $this
      */
-    public function setEtag(HttpRequest $request, HttpResponse $response)
+    public function setETag(HttpRequest $request, HttpResponse $response)
     {
         $headers = $response->getHeaders();
 
