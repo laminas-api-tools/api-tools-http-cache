@@ -302,13 +302,21 @@ class HttpCacheListener extends AbstractListenerAggregate
     public function setEtag(HttpRequest $request, HttpResponse $response)
     {
         $headers = $response->getHeaders();
-        if (! empty($this->cacheConfig['etag'])
-            && (! $headers->has('etag')
-                || ! empty($this->cacheConfig['etag']['override']))
-        ) {
-            $etag = new Header\Etag($this->generateEtag($request, $response));
-            $headers->addHeader($etag);
+
+        if (empty($this->cacheConfig['etag'])) {
+            return $this;
         }
+
+        // ETag is already set and we should not override, default is to not overwrite.
+        if ($headers->has('Etag')
+            && !empty($this->cacheConfig['etag']['override'])
+            && $this->cacheConfig['etag']['override'] === false) {
+
+            return $this;
+        }
+
+        $etag = $this->generateEtag($request, $response);
+        $headers->addHeader(new Header\Etag($etag));
 
         return $this;
     }

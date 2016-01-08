@@ -494,6 +494,11 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                 ['Etag' => md5('')],
             ],
             [
+                ['vary' => [ ]],
+                ['Etag' => '1234'],
+                ['Etag' => '1234'],
+            ],
+            [
                 ['vary' => [
                     'override' => false
                 ]],
