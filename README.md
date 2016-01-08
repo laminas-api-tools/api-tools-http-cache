@@ -101,11 +101,11 @@ For ETags you can specify a custom generator in the configuration:
 ```
 'etag' => array(
     'override' => true,
-    'generator' => 'Your\Own\EtagGenerator'
+    'generator' => 'Your\Own\ETagGenerator'
 )
 ```
 
-A generator example can be found in `\ZF\HttpCache\DefaultEtagGenerator`. 
+A generator example can be found in `\ZF\HttpCache\DefaultETagGenerator`. 
 
 
 ##### Key: `<cache-header-value>`
