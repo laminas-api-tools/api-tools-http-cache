@@ -357,6 +357,6 @@ class HttpCacheListener extends AbstractListenerAggregate
                 ->get($this->cacheConfig['etag']['generator']);
         }
 
-        return $generator->generateEtag($request, $response);
+        return $generator->generate($request, $response);
     }
 }

@@ -7,7 +7,7 @@ use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
-use ZF\HttpCache\EtagGeneratorInterface;
+use ZF\HttpCache\ETagGeneratorInterface;
 use ZF\HttpCache\HttpCacheListener;
 
 class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
@@ -728,7 +728,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setvary
+     * @covers \ZF\HttpCache\HttpCacheListener::setEtag
      * @dataProvider setEtagDataProvider
      *
      * @param array $cacheConfig
@@ -750,8 +750,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetETagGenerator()
     {
-        $testGenerator = $this->prophesize(EtagGeneratorInterface::class);
-        $testGenerator->generateEtag(Argument::any(), Argument::any())->willReturn('generated');
+        $testGenerator = $this->prophesize(ETagGeneratorInterface::class);
+        $testGenerator->generate(Argument::any(), Argument::any())->willReturn('generated');
 
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('test-etag-generator')->willReturn(true);
