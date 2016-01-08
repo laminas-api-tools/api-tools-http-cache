@@ -12,7 +12,6 @@ return [
     'service_manager' => [
         'factories' => [
             HttpCacheListener::class => HttpCacheListenerFactory::class,
-            DefaultETagGenerator::class => DefaultETagGenerator::class,
         ],
     ],
 
