@@ -315,8 +315,8 @@ class HttpCacheListener extends AbstractListenerAggregate
             return $this;
         }
 
-        $etag = $this->generateEtag($request, $response);
-        $headers->addHeader(new Header\Etag($etag));
+        $generator = $this->getETagGenerator();
+        $headers->addHeader(new Header\Etag($generator->generate($request, $response)));
 
         return $this;
     }
@@ -345,26 +345,22 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * Generates an Etag based on the response.
+     * Returns an instance of a ETag generator.
      *
-     * @param HttpRequest $request
-     * @param HttpResponse $response
-     * @return string Etag
+     * @return ETagGeneratorInterface
      */
-    protected function generateEtag(HttpRequest $request, HttpResponse $response)
+    protected function getETagGenerator()
     {
-        $generator = new DefaultEtagGenerator();
-
         // Use custom generator.
         if (!empty($this->container)
             && !empty($this->cacheConfig['etag']['generator'])
             && $this->container->has($this->cacheConfig['etag']['generator'])
             && $this->container->get($this->cacheConfig['etag']['generator']) instanceof EtagGeneratorInterface
         ) {
-            $generator = $this->container
+            return $this->container
                 ->get($this->cacheConfig['etag']['generator']);
         }
 
-        return $generator->generate($request, $response);
+        return new DefaultEtagGenerator();
     }
 }
