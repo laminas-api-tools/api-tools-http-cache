@@ -92,11 +92,11 @@ A wildcard stands for all the non-specified HTTP methods.
 
 ##### Key: `<cache-header-name>` 
 
-A http cache header name (`cache-control`, `expires`, `etag` etc.).
+An HTTP cache header name (`Cache-control`, `expires`, `etag` etc.).
 
 ###### ETags
 
-For Etags you can specify a custom generator in the configuration:
+For ETags you can specify a custom generator in the configuration:
 
 ```
 'etag' => array(
