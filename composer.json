@@ -46,9 +46,10 @@
     ],
     "require": {
         "php": "^5.5|^7.0",
-        "zendframework/zend-eventmanager": "~2.5",
+        "zendframework/zend-eventmanager": "~2.5|~3.0",
         "zendframework/zend-http": "~2.5",
-        "zendframework/zend-mvc": "~2.5"
+        "zendframework/zend-mvc": "~2.5|~3.0",
+        "zendframework/zend-router": "~3.0"
     },
     "require-dev": {
         "container-interop/container-interop": "^1.1",

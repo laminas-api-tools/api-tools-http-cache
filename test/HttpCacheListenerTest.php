@@ -4,7 +4,7 @@ namespace ZFTest\HttpCache;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Router\RouteMatch;
 use ZF\HttpCache\HttpCacheListener;
 
 class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
@@ -621,7 +621,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $date   = new \DateTime($headers['Expires']);
         $exDate = new \DateTime($exHeaders['Expires']);
 
-        $this->assertEquals($exDate, $date, '', 2);
+        $this->assertEquals($exDate, $date, '', 3);
     }
 
     /**
