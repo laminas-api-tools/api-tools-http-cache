@@ -150,10 +150,9 @@ class HttpCacheListener extends AbstractListenerAggregate
         } elseif (! empty($this->config['regex_delimiter'])) {
             foreach ($cacheConfig as $key => $config) {
                 if (substr($key, 0, 1) === $this->config['regex_delimiter']) {
-                    if (
-                        preg_match($key, $routeName)
-                        or preg_match($key, "$controller::$action")
-                        or preg_match($key, $controller)
+                    if (preg_match($key, $routeName)
+                        || preg_match($key, "$controller::$action")
+                        || preg_match($key, $controller)
                     ) {
                         $controllerConfig = $config;
                         break;
