@@ -4,6 +4,7 @@ namespace ZFTest\HttpCache;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
 use Zend\Router\RouteMatch;
 use ZF\HttpCache\HttpCacheListener;
 
@@ -13,6 +14,15 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      * @var HttpCacheListener
      */
     protected $instance;
+
+    protected function createRouteMatch(array $matches)
+    {
+        $class = class_exists(V2RouteMatch::class)
+            ? V2RouteMatch::class
+            : RouteMatch::class;
+
+        return new $class($matches);
+    }
 
     protected function calculateDate($seconds)
     {
@@ -530,7 +540,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch($routeMatch));
+        $event->setRouteMatch($this->createRouteMatch($routeMatch));
 
         $response = new HttpResponse();
         $event->setResponse($response);
@@ -561,7 +571,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch($routeMatch));
+        $event->setRouteMatch($this->createRouteMatch($routeMatch));
 
         $this->instance->setConfig($config)
             ->onRoute($event);
