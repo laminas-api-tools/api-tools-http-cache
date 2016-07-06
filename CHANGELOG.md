@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.3 - TBD
+## 1.2.3 - 2016-07-06
 
 ### Added
 
@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#10](https://github.com/zfcampus/zf-http-cache/pull/10) removes the
+  dependency on zend-loader (it was not being used).
 
 ### Fixed
 
