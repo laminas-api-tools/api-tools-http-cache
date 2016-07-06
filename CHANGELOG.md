@@ -6,6 +6,15 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#11](https://github.com/zfcampus/zf-http-cache/pull/11) adds ETag support.
+  A default generator that uses MD5 hashing of content for comparisons; if
+  content matches, an empty 304 response is returned with a `Not-Modified`
+  header. By default, it will not overwrite any ETag headers you already send,
+  though you can override that via the `zf-http-cache.etag.override` flag.
+  Additionally, you can provide alternate ETag generation mechanisms by
+  implementing `ZF\HttpCache\ETagGeneratorInterface`, and specifying the service
+  name of your implementation via the `zf-http-cache.etag.generator`
+  configuration value.
 - [#13](https://github.com/zfcampus/zf-http-cache/pull/13) and
   [#14](https://github.com/zfcampus/zf-http-cache/pull/14) add support for Zend
   Framework v3 components, including zend-mvc, zend-servicemanager, and
