@@ -93,10 +93,10 @@ return [
     //                ],
     //
     //                // Vary: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
-    //                'etag' => array(
+    //                'etag' => [
     //                    'override' => false, // Whether to override etag header if already present in response
-    //                    'generator' => '\ZF\HttpCache\DefaultETagGenerator' // what etag generator to use, must implement \ZF\HttpCache\EtagGeneratorInterface
-    //                 )
+    //                    'generator' => '\ZF\HttpCache\DefaultETagGenerator', // what etag generator to use, must implement \ZF\HttpCache\EtagGeneratorInterface
+    //                ],
     //            ],
     //        ],
     //    ],
