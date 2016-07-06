@@ -33,14 +33,14 @@ key:
 
 
 ```php
-return array(
+return [
     /* ... */
-    'modules' => array(
+    'modules' => [
         /* ... */
         'ZF\HttpCache',
-    ),
+    ],
     /* ... */
-);
+];
 ```
 
 Configuration
@@ -62,20 +62,20 @@ Example:
 
 ```php
 // See the `config/application.config.php` for a complete commented example
-'zf-http-cache' => array(
+'zf-http-cache' => [
     /* ... */
-    'controllers' => array(
-        '<controller>' => array(
-            '<http-method>'  => array(
-                '<cache-header-name>' => array(
+    'controllers' => [
+        '<controller>' => [
+            '<http-method>'  => [
+                '<cache-header-name>' => [
                     'override' => true,
                     'value'    => '<cache-header-value>',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
     /* ... */
-),    
+],    
 ```
 
 ##### Key: `<controller>` 
@@ -99,10 +99,10 @@ An HTTP cache header name (`Cache-control`, `expires`, `etag` etc.).
 For ETags you can specify a custom generator in the configuration:
 
 ```
-'etag' => array(
+'etag' => [
     'override' => true,
-    'generator' => 'Your\Own\ETagGenerator'
-)
+    'generator' => 'Your\Own\ETagGenerator',
+],
 ```
 
 A generator example can be found in `\ZF\HttpCache\DefaultETagGenerator`. 
@@ -127,11 +127,11 @@ If you no longer need this module, rather consider removing the module from the 
 Example:
 
 ```php
-'zf-http-cache' => array(
+'zf-http-cache' => [
     /* ... */
     'enable' => true, // Cache module is enabled.
     /* ... */
-),    
+],
 ```
 
 #### Key: `http_codes_black_list`
@@ -142,11 +142,11 @@ Defaults to all others than `200`.
 Example:
 
 ```php
-'zf-http-cache' => array(
+'zf-http-cache' => [
     /* ... */
-    'http_codes_black_list' => array('201', '304', '400', '500'), // Whatever the other configurations, the responses with these HTTP codes won't be cached.
+    'http_codes_black_list' => ['201', '304', '400', '500'], // Whatever the other configurations, the responses with these HTTP codes won't be cached.
     /* ... */
-),
+],
 ```
 
 #### Key: `regex_delimiter`
@@ -166,17 +166,17 @@ Regexp wins over wildcard.
 Example:
 
 ```php
-'zf-http-cache' => array(
+'zf-http-cache' => [
     /* ... */
     'regex_delimiter' => '~',
     /* ... */
-    'controllers' => array(
-        '~.*~' => array( // Acts as a wildcard.
+    'controllers' => [
+        '~.*~' => [ // Acts as a wildcard.
             /* ... */
-        ),
-    ),
+        ],
+    ],
     /* ... */
-),
+],
 ```
 
 ### System Configuration
@@ -184,11 +184,11 @@ Example:
 The following configuration is provided in `config/module.config.php`:
 
 ```php
-'service_manager' => array(
-    'factories' => array(
+'service_manager' => [
+    'factories' => [
         'ZF\HttpCache\HttpCacheListener' => 'ZF\HttpCache\HttpCacheListenerFactory',
-    )
-),
+    ],
+],
 ```
 
 ZF2 Events
