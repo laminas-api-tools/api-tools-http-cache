@@ -137,7 +137,7 @@ class HttpCacheListener extends AbstractListenerAggregate
          * Searches, case sensitive, in this very order:
          * a matching route name in config
          * if not found, a matching "controller::action" name
-         * if not found, a matching "controller::action" name
+         * if not found, a matching "controller" name
          * if not found, a matching regex
          * if not found, a wildcard (default)
          */
