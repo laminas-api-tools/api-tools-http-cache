@@ -6,7 +6,13 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#13](https://github.com/zfcampus/zf-http-cache/pull/13) and
+  [#14](https://github.com/zfcampus/zf-http-cache/pull/14) add support for Zend
+  Framework v3 components, including zend-mvc, zend-servicemanager, and
+  zend-eventmanager.
+- [#14](https://github.com/zfcampus/zf-http-cache/pull/14) marks the package as
+  a ZF module, allowing zf-component-installer to auto-inject it into
+  application configuration.
 
 ### Deprecated
 
@@ -14,7 +20,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#14](https://github.com/zfcampus/zf-http-cache/pull/14) removes support for
+  PHP 5.5.
 
 ### Fixed
 
