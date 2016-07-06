@@ -8,6 +8,7 @@ use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
 use Zend\Router\RouteMatch;
+use ZF\HttpCache\DefaultETagGenerator;
 use ZF\HttpCache\ETagGeneratorInterface;
 use ZF\HttpCache\HttpCacheListener;
 
@@ -17,6 +18,11 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      * @var HttpCacheListener
      */
     protected $instance;
+
+    public function setUp()
+    {
+        $this->instance = new HttpCacheListener();
+    }
 
     protected function createRouteMatch(array $matches)
     {
@@ -550,11 +556,6 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function setUp()
-    {
-        $this->instance = new HttpCacheListener();
-    }
-
     /**
      * @covers \ZF\HttpCache\HttpCacheListener::checkStatusCode
      * @dataProvider checkStatusCodeDataProvider
@@ -768,11 +769,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $testGenerator = $this->prophesize(ETagGeneratorInterface::class);
         $testGenerator->generate(Argument::any(), Argument::any())->willReturn('generated');
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('test-etag-generator')->willReturn(true);
-        $container->get('test-etag-generator')->willReturn($testGenerator->reveal());
-
-        $httpCacheListener = new HttpCacheListener($container->reveal());
+        $httpCacheListener = new HttpCacheListener($testGenerator->reveal());
         $httpCacheListener->setCacheConfig([
             'etag' => [
                 'override' => true,

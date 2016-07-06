@@ -6,7 +6,6 @@
 
 namespace ZF\HttpCache;
 
-use Interop\Container\ContainerInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\Http\Header;
@@ -32,17 +31,19 @@ class HttpCacheListener extends AbstractListenerAggregate
      */
     protected $config = [];
 
-    /** @var ContainerInterface */
-    protected $container;
+    /**
+     * @var ETagGeneratorInterface
+     */
+    protected $eTagGenerator;
 
     /**
      * HttpCacheListener constructor.
      *
-     * @param ContainerInterface $container
+     * @param ETagGeneratorInterface $eTagGenerator
      */
-    public function __construct($container = null)
+    public function __construct(ETagGeneratorInterface $eTagGenerator = null)
     {
-        $this->container = $container;
+        $this->eTagGenerator = $eTagGenerator ?: new DefaultETagGenerator();
     }
 
     /**
@@ -309,14 +310,15 @@ class HttpCacheListener extends AbstractListenerAggregate
 
         // ETag is already set and we should not override, default is to not overwrite.
         if ($headers->has('Etag')
-            && !empty($this->cacheConfig['etag']['override'])
-            && $this->cacheConfig['etag']['override'] === false) {
-
+            && ! empty($this->cacheConfig['etag']['override'])
+            && $this->cacheConfig['etag']['override'] === false
+        ) {
             return $this;
         }
 
-        $generator = $this->getETagGenerator();
-        $headers->addHeader(new Header\Etag($generator->generate($request, $response)));
+        $headers->addHeader(new Header\Etag(
+            $this->eTagGenerator->generate($request, $response)
+        ));
 
         return $this;
     }
@@ -342,25 +344,5 @@ class HttpCacheListener extends AbstractListenerAggregate
         }
 
         return $this;
-    }
-
-    /**
-     * Returns an instance of a ETag generator.
-     *
-     * @return ETagGeneratorInterface
-     */
-    protected function getETagGenerator()
-    {
-        // Use custom generator.
-        if (!empty($this->container)
-            && !empty($this->cacheConfig['etag']['generator'])
-            && $this->container->has($this->cacheConfig['etag']['generator'])
-            && $this->container->get($this->cacheConfig['etag']['generator']) instanceof EtagGeneratorInterface
-        ) {
-            return $this->container
-                ->get($this->cacheConfig['etag']['generator']);
-        }
-
-        return new DefaultETagGenerator();
     }
 }
