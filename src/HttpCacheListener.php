@@ -148,16 +148,33 @@ class HttpCacheListener extends AbstractListenerAggregate
         }
 
         $cacheConfig = $this->config['controllers'];
-        $controller  = $e
-            ->getRouteMatch()
-            ->getParam('controller');
+        $routeMatch  = $e->getRouteMatch();
 
-        if (! empty($cacheConfig[$controller])) {
+        $action      = $routeMatch->getParam('action');
+        $controller  = $routeMatch->getParam('controller');
+        $routeName   = $routeMatch->getMatchedRouteName();
+
+        /*
+         * Searches, case sensitive, in this very order:
+         * a matching route name in config
+         * if not found, a matching "controller::action" name
+         * if not found, a matching "controller" name
+         * if not found, a matching regex
+         * if not found, a wildcard (default)
+         */
+        if (! empty($cacheConfig[$routeName])) {
+            $controllerConfig = $cacheConfig[$routeName];
+        } elseif (! empty($cacheConfig["$controller::$action"])) {
+            $controllerConfig = $cacheConfig["$controller::$action"];
+        } elseif (! empty($cacheConfig[$controller])) {
             $controllerConfig = $cacheConfig[$controller];
         } elseif (! empty($this->config['regex_delimiter'])) {
             foreach ($cacheConfig as $key => $config) {
                 if (substr($key, 0, 1) === $this->config['regex_delimiter']) {
-                    if (preg_match($key, preg_quote($controller, $this->config['regex_delimiter']))) {
+                    if (preg_match($key, $routeName)
+                        || preg_match($key, "$controller::$action")
+                        || preg_match($key, $controller)
+                    ) {
                         $controllerConfig = $config;
                         break;
                     }

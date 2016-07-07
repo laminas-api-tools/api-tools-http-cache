@@ -58,7 +58,7 @@ return [
     //        /*
     //         * Regular configuration.
     //         */
-    //        'home' => [ // controller name
+    //        'home::index' => [ // route name
     //            'get' => [ // Http method (wildcard '*' supported as whatever method)
     //                /*
     //                 * General HTTP caching theory: http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
@@ -98,6 +98,15 @@ return [
     //                    'generator' => '\ZF\HttpCache\DefaultETagGenerator', // what etag generator to use, must implement \ZF\HttpCache\EtagGeneratorInterface
     //                ],
     //            ],
+    //        ],
+    //        'index::index' => [ // controller / action names
+    //            'get' => [...],
+    //        ],
+    //        'index' => [ // controller name
+    //            'get' => [...],
+    //        ],
+    //        '~.*::index~' => [ // regex
+    //            'get' => [...],
     //        ],
     //    ],
     //

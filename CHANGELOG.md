@@ -22,6 +22,15 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#14](https://github.com/zfcampus/zf-http-cache/pull/14) marks the package as
   a ZF module, allowing zf-component-installer to auto-inject it into
   application configuration.
+- [#12](https://github.com/zfcampus/zf-http-cache/pull/12) adds more
+  capabilities around matching routed controllers, including the ability to
+  match:
+  - the route name
+  - `controller::action` concatenations
+  - just the controller
+  - a regular expression (based on concatenating the controller and action)
+  - wildcards
+  See the README.md file and the `config/module.config.php` for examples.
 
 ### Deprecated
 
