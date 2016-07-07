@@ -65,14 +65,16 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             [
                 ['enable' => false],
                 'get',
-                ['controller' => 'foo'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [],
             ],
 
             [
                 ['enable' => true],
                 'get',
-                [],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [],
             ],
 
@@ -91,7 +93,49 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'get',
-                ['controller' => 'foo'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
+                [
+                    'expires' => [
+                        'override' => true,
+                        'value'    => '+1 day',
+                    ],
+                ],
+            ],
+
+            [
+                [
+                    'enable' => true,
+                    'controllers' => [
+                        'foo' => [
+                            'get' => [
+                                'expires' => [
+                                    'override' => true,
+                                    'value'    => '+2 day',
+                                ],
+                            ],
+                        ],
+                        'foo::bar' => [
+                            'get' => [
+                                'expires' => [
+                                    'override' => true,
+                                    'value'    => '+2 day',
+                                ],
+                            ],
+                        ],
+                        'my.route.name' => [
+                            'get' => [
+                                'expires' => [
+                                    'override' => true,
+                                    'value'    => '+1 day',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'get',
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [
                     'expires' => [
                         'override' => true,
@@ -115,7 +159,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'head',
-                ['controller' => 'foo'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [
                     'expires' => [
                         'override' => true,
@@ -139,7 +184,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'get',
-                ['controller' => 'bar'],
+                'my.route.name',
+                ['action' => 'baz', 'controller' => 'bar'],
                 [
                     'expires' => [
                         'override' => true,
@@ -163,7 +209,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [
                     'expires' => [
                         'override' => true,
@@ -195,7 +242,68 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
+                [
+                    'cache-control' => [
+                        'override' => false,
+                        'value'    => 'private',
+                    ],
+                ],
+            ],
+
+            [
+                [
+                    'enable' => true,
+                    'controllers' => [
+                        '~my\.[a-z.]{10}~' => [
+                            '*' => [
+                                'cache-control' => [
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ],
+                            ],
+                        ],
+                        '*' => [
+                            'get' => [
+                                'cache-control' => [
+                                    'override' => true,
+                                    'value'    => 'public',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'regex_delimiter' => '~',
+                ],
+                'head',
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
+                [
+                    'cache-control' => [
+                        'override' => false,
+                        'value'    => 'private',
+                    ],
+                ],
+            ],
+
+            [
+                [
+                    'enable' => true,
+                    'controllers' => [
+                        '~[a-z]{3}::[a-z]{3}~' => [
+                            '*' => [
+                                'cache-control' => [
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'regex_delimiter' => '~',
+                ],
+                'head',
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
                 [
                     'cache-control' => [
                         'override' => false,
@@ -228,7 +336,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     'regex_delimiter' => '~',
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
                 [
                     'cache-control' => [
                         'override' => false,
@@ -253,7 +362,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     'regex_delimiter' => '~',
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
                 [
                     'cache-control' => [
                         'override' => false,
@@ -627,17 +737,23 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @param array  $config
      * @param string $method
+     * @param string $routeName
      * @param array  $routeMatch
      * @param array  $exCacheConfig
      */
-    public function testOnRoute(array $config, $method, array $routeMatch, array $exCacheConfig)
+    public function testOnRoute(array $config, $method, $routeName, array $routeMatch, array $exCacheConfig)
     {
         $request = new HttpRequest();
         $request->setMethod($method);
 
+        $routeMatch = $this->createRouteMatch($routeMatch);
+        if ($routeName) {
+            $routeMatch->setMatchedRouteName($routeName);
+        }
+
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch($this->createRouteMatch($routeMatch));
+        $event->setRouteMatch($routeMatch);
 
         $this->instance->setConfig($config)
             ->onRoute($event);

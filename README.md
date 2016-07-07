@@ -56,7 +56,13 @@ The `config/module.config.php` file contains a self-explanative example of confi
 
 #### Key: `controllers`
 
-The `controllers` key is utilized for mapping a combination of a controller and a HTTP method (see below) to a cache header configuration.
+The `controllers` key is utilized for mapping (case sensitive) either 
+- a route name
+- or a concatenated `controller::action`
+- or a controller
+- or a regexp 
+- or a wildcard
+and a HTTP method (see below) to a cache header configuration.
 
 Example:
 
@@ -80,7 +86,11 @@ Example:
 
 ##### Key: `<controller>` 
 
-Either a controller name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()->getParam('controller')`, case-sensitive) or a wildcard.
+Either 
+- a concatenation of `$controller::$action` 
+- or a controller name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()->getParam('controller')`, case-sensitive) 
+- or a regexp (see `<regex_delimiter>` key)
+- or a wildcard
 
 A wildcard stands for all the non-specified controllers.
 
