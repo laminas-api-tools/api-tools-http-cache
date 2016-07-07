@@ -41,10 +41,7 @@
     "autoload": {
         "psr-4": {
             "ZF\\HttpCache\\": "src/"
-        },
-        "classmap": [
-            "Module.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
