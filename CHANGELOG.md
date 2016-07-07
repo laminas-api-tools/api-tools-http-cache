@@ -64,7 +64,7 @@ All notable changes to this project will be documented in this file, in reverse 
   - the route name
   - `controller::action` concatenations
   - just the controller
-  - a regular expression (based on concatenating the controller and action)
+  - a regular expression (to match against any of the above items)
   - wildcards
   See the README.md file and the `config/module.config.php` for examples.
 
