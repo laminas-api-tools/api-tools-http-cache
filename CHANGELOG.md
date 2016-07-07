@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.3.0 - TBD
+## 1.3.0 - 2016-07-07
 
 ### Added
 
@@ -40,24 +40,6 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#14](https://github.com/zfcampus/zf-http-cache/pull/14) removes support for
   PHP 5.5.
-
-### Fixed
-
-- Nothing.
-
-## 1.2.4 - TBD
-
-### Added
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
 
 ### Fixed
 
