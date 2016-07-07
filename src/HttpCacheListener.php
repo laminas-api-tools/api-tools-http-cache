@@ -32,6 +32,21 @@ class HttpCacheListener extends AbstractListenerAggregate
     protected $config = [];
 
     /**
+     * @var ETagGeneratorInterface
+     */
+    protected $eTagGenerator;
+
+    /**
+     * HttpCacheListener constructor.
+     *
+     * @param ETagGeneratorInterface $eTagGenerator
+     */
+    public function __construct(ETagGeneratorInterface $eTagGenerator = null)
+    {
+        $this->eTagGenerator = $eTagGenerator ?: new DefaultETagGenerator();
+    }
+
+    /**
      * @param EventManagerInterface $events
      * @param int                   $priority
      */
@@ -97,13 +112,19 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
+
+        /** @var $request HttpRequest */
+        $request = $e->getRequest();
+
         /* @var $headers Headers */
         $headers = $response->getHeaders();
 
         $this->setExpires($headers)
+            ->setETag($request, $response)
             ->setCacheControl($headers)
             ->setPragma($headers)
-            ->setVary($headers);
+            ->setVary($headers)
+            ->setNotModified($request, $response);
     }
 
     /**
@@ -127,16 +148,33 @@ class HttpCacheListener extends AbstractListenerAggregate
         }
 
         $cacheConfig = $this->config['controllers'];
-        $controller  = $e
-            ->getRouteMatch()
-            ->getParam('controller');
+        $routeMatch  = $e->getRouteMatch();
 
-        if (! empty($cacheConfig[$controller])) {
+        $action      = $routeMatch->getParam('action');
+        $controller  = $routeMatch->getParam('controller');
+        $routeName   = $routeMatch->getMatchedRouteName();
+
+        /*
+         * Searches, case sensitive, in this very order:
+         * a matching route name in config
+         * if not found, a matching "controller::action" name
+         * if not found, a matching "controller" name
+         * if not found, a matching regex
+         * if not found, a wildcard (default)
+         */
+        if (! empty($cacheConfig[$routeName])) {
+            $controllerConfig = $cacheConfig[$routeName];
+        } elseif (! empty($cacheConfig["$controller::$action"])) {
+            $controllerConfig = $cacheConfig["$controller::$action"];
+        } elseif (! empty($cacheConfig[$controller])) {
             $controllerConfig = $cacheConfig[$controller];
         } elseif (! empty($this->config['regex_delimiter'])) {
             foreach ($cacheConfig as $key => $config) {
                 if (substr($key, 0, 1) === $this->config['regex_delimiter']) {
-                    if (preg_match($key, preg_quote($controller, $this->config['regex_delimiter']))) {
+                    if (preg_match($key, $routeName)
+                        || preg_match($key, "$controller::$action")
+                        || preg_match($key, $controller)
+                    ) {
                         $controllerConfig = $config;
                         break;
                     }
@@ -269,6 +307,59 @@ class HttpCacheListener extends AbstractListenerAggregate
         ) {
             $vary = new Header\Vary($this->cacheConfig['vary']['value']);
             $headers->addHeader($vary);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @param HttpResponse $response
+     * @return $this
+     */
+    public function setETag(HttpRequest $request, HttpResponse $response)
+    {
+        $headers = $response->getHeaders();
+
+        if (empty($this->cacheConfig['etag'])) {
+            return $this;
+        }
+
+        // ETag is already set and we should not override, default is to not overwrite.
+        if ($headers->has('Etag')
+            && ! empty($this->cacheConfig['etag']['override'])
+            && $this->cacheConfig['etag']['override'] === false
+        ) {
+            return $this;
+        }
+
+        $headers->addHeader(new Header\Etag(
+            $this->eTagGenerator->generate($request, $response)
+        ));
+
+        return $this;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @param HttpResponse $response
+     * @return $this
+     */
+    public function setNotModified(HttpRequest $request, HttpResponse $response)
+    {
+        if (! $request->getHeaders()->has('If-None-Match')
+            || ! $response->getHeaders()->has('Etag')
+        ) {
+            return $this;
+        }
+
+        $requestEtags = $request->getHeaders()->get('If-None-Match')->getFieldValue();
+        $requestEtags = ! is_array($requestEtags) ? [$requestEtags] : $requestEtags;
+        $responseEtag = $response->getHeaders()->get('Etag')->getFieldValue();
+
+        if (in_array($responseEtag, $requestEtags) || in_array('*', $requestEtags)) {
+            $response->setStatusCode(304);
+            $response->setContent(null);
         }
 
         return $this;

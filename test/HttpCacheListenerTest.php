@@ -1,10 +1,15 @@
 <?php
 namespace ZFTest\HttpCache;
 
+use Interop\Container\ContainerInterface;
+use Prophecy\Argument;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
+use Zend\Router\RouteMatch;
+use ZF\HttpCache\DefaultETagGenerator;
+use ZF\HttpCache\ETagGeneratorInterface;
 use ZF\HttpCache\HttpCacheListener;
 
 class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
@@ -13,6 +18,20 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      * @var HttpCacheListener
      */
     protected $instance;
+
+    public function setUp()
+    {
+        $this->instance = new HttpCacheListener();
+    }
+
+    protected function createRouteMatch(array $matches)
+    {
+        $class = class_exists(V2RouteMatch::class)
+            ? V2RouteMatch::class
+            : RouteMatch::class;
+
+        return new $class($matches);
+    }
 
     protected function calculateDate($seconds)
     {
@@ -46,14 +65,16 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
             [
                 ['enable' => false],
                 'get',
-                ['controller' => 'foo'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [],
             ],
 
             [
                 ['enable' => true],
                 'get',
-                [],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [],
             ],
 
@@ -72,7 +93,49 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'get',
-                ['controller' => 'foo'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
+                [
+                    'expires' => [
+                        'override' => true,
+                        'value'    => '+1 day',
+                    ],
+                ],
+            ],
+
+            [
+                [
+                    'enable' => true,
+                    'controllers' => [
+                        'foo' => [
+                            'get' => [
+                                'expires' => [
+                                    'override' => true,
+                                    'value'    => '+2 day',
+                                ],
+                            ],
+                        ],
+                        'foo::bar' => [
+                            'get' => [
+                                'expires' => [
+                                    'override' => true,
+                                    'value'    => '+2 day',
+                                ],
+                            ],
+                        ],
+                        'my.route.name' => [
+                            'get' => [
+                                'expires' => [
+                                    'override' => true,
+                                    'value'    => '+1 day',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'get',
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [
                     'expires' => [
                         'override' => true,
@@ -96,7 +159,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'head',
-                ['controller' => 'foo'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [
                     'expires' => [
                         'override' => true,
@@ -120,7 +184,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'get',
-                ['controller' => 'bar'],
+                'my.route.name',
+                ['action' => 'baz', 'controller' => 'bar'],
                 [
                     'expires' => [
                         'override' => true,
@@ -144,7 +209,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'foo'],
                 [
                     'expires' => [
                         'override' => true,
@@ -176,7 +242,68 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
+                [
+                    'cache-control' => [
+                        'override' => false,
+                        'value'    => 'private',
+                    ],
+                ],
+            ],
+
+            [
+                [
+                    'enable' => true,
+                    'controllers' => [
+                        '~my\.[a-z.]{10}~' => [
+                            '*' => [
+                                'cache-control' => [
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ],
+                            ],
+                        ],
+                        '*' => [
+                            'get' => [
+                                'cache-control' => [
+                                    'override' => true,
+                                    'value'    => 'public',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'regex_delimiter' => '~',
+                ],
+                'head',
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
+                [
+                    'cache-control' => [
+                        'override' => false,
+                        'value'    => 'private',
+                    ],
+                ],
+            ],
+
+            [
+                [
+                    'enable' => true,
+                    'controllers' => [
+                        '~[a-z]{3}::[a-z]{3}~' => [
+                            '*' => [
+                                'cache-control' => [
+                                    'override' => false,
+                                    'value'    => 'private',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'regex_delimiter' => '~',
+                ],
+                'head',
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
                 [
                     'cache-control' => [
                         'override' => false,
@@ -209,7 +336,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     'regex_delimiter' => '~',
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
                 [
                     'cache-control' => [
                         'override' => false,
@@ -234,7 +362,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
                     'regex_delimiter' => '~',
                 ],
                 'head',
-                ['controller' => 'baz'],
+                'my.route.name',
+                ['action' => 'bar', 'controller' => 'baz'],
                 [
                     'cache-control' => [
                         'override' => false,
@@ -475,9 +604,66 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function setUp()
+    /**
+     * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
+     * @see testSetETag
+     * @return array
+     */
+    public function setETagDataProvider()
     {
-        $this->instance = new HttpCacheListener();
+        return [
+            [
+                ['etag' => [
+                    'override' => true
+                ]],
+                [],
+                ['Etag' => md5('')],
+            ],
+            [
+                ['vary' => [ ]],
+                ['Etag' => '1234'],
+                ['Etag' => '1234'],
+            ],
+            [
+                ['vary' => [
+                    'override' => false
+                ]],
+                ['Etag' => '1234'],
+                ['Etag' => '1234'],
+            ],
+            [
+                ['etag' => [
+                    'override' => true
+                ]],
+                ['Etag' => '1234'],
+                ['Etag' => md5('')],
+            ],
+        ];
+    }
+
+    /**
+     * @see testSetNotModified
+     * @return array
+     */
+    public function setNotModifiedDataProvider()
+    {
+        return [
+            [
+                [],
+                ['Etag' => '123'],
+                200,
+            ],
+            [
+                ['If-None-Match' => '1234'],
+                ['Etag' => '1234'],
+                304,
+            ],
+            [
+                ['If-None-Match' => '1234'],
+                ['Etag' => 'something-else'],
+                200
+            ],
+        ];
     }
 
     /**
@@ -530,7 +716,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch($routeMatch));
+        $event->setRouteMatch($this->createRouteMatch($routeMatch));
 
         $response = new HttpResponse();
         $event->setResponse($response);
@@ -551,17 +737,23 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @param array  $config
      * @param string $method
+     * @param string $routeName
      * @param array  $routeMatch
      * @param array  $exCacheConfig
      */
-    public function testOnRoute(array $config, $method, array $routeMatch, array $exCacheConfig)
+    public function testOnRoute(array $config, $method, $routeName, array $routeMatch, array $exCacheConfig)
     {
         $request = new HttpRequest();
         $request->setMethod($method);
 
+        $routeMatch = $this->createRouteMatch($routeMatch);
+        if ($routeName) {
+            $routeMatch->setMatchedRouteName($routeName);
+        }
+
         $event = new MvcEvent();
         $event->setRequest($request);
-        $event->setRouteMatch(new RouteMatch($routeMatch));
+        $event->setRouteMatch($routeMatch);
 
         $this->instance->setConfig($config)
             ->onRoute($event);
@@ -621,7 +813,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $date   = new \DateTime($headers['Expires']);
         $exDate = new \DateTime($exHeaders['Expires']);
 
-        $this->assertEquals($exDate, $date, '', 2);
+        $this->assertEquals($exDate, $date, '', 3);
     }
 
     /**
@@ -664,5 +856,70 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->instance->setVary($headers);
 
         $this->assertSame($exHeaders, $headers->toArray());
+    }
+
+
+    /**
+     * @covers \ZF\HttpCache\HttpCacheListener::setETag
+     * @dataProvider setEtagDataProvider
+     *
+     * @param array $cacheConfig
+     * @param array $headers
+     * @param array $exHeaders
+     */
+    public function testSetETag(array $cacheConfig, array $headers, array $exHeaders)
+    {
+        $this->instance->setCacheConfig($cacheConfig);
+
+        $response = new HttpResponse();
+        $headers  = $response->getHeaders()
+            ->addHeaders($headers);
+
+        $this->instance->setETag(new HttpRequest(), $response);
+
+        $this->assertSame($exHeaders, $headers->toArray());
+    }
+
+    public function testSetETagGenerator()
+    {
+        $testGenerator = $this->prophesize(ETagGeneratorInterface::class);
+        $testGenerator->generate(Argument::any(), Argument::any())->willReturn('generated');
+
+        $httpCacheListener = new HttpCacheListener($testGenerator->reveal());
+        $httpCacheListener->setCacheConfig([
+            'etag' => [
+                'override' => true,
+                'generator' => 'test-etag-generator'
+            ],
+        ]);
+
+        $response = new HttpResponse();
+        $headers  = $response->getHeaders();
+
+        $httpCacheListener->setETag(new HttpRequest(), $response);
+
+        $this->assertSame(['Etag' => 'generated'], $headers->toArray());
+    }
+
+    /**
+     * @covers       \ZF\HttpCache\HttpCacheListener::setvary
+     * @dataProvider setNotModifiedDataProvider
+     *
+     * @param array $requestHeaders
+     * @param array $responseHeaders
+     * @param array $exStatusCode
+     * @internal param array $cacheConfig
+     */
+    public function testSetNotModified(array $requestHeaders, array $responseHeaders, $exStatusCode)
+    {
+        $request = new HttpRequest();
+        $request->getHeaders()->addHeaders($requestHeaders);
+
+        $response = new HttpResponse();
+        $response->getHeaders()->addHeaders($responseHeaders);
+
+        $this->instance->setNotModified($request, $response);
+
+        $this->assertSame($exStatusCode, $response->getStatusCode());
     }
 }
