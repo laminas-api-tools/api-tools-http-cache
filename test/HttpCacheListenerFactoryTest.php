@@ -7,7 +7,7 @@
 namespace ZFTest\HttpCache;
 
 use Interop\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use ZF\HttpCache\DefaultETagGenerator;
 use ZF\HttpCache\ETagGeneratorInterface;
@@ -78,7 +78,8 @@ class HttpCacheListenerFactoryTest extends TestCase
 
         $factory  = new HttpCacheListenerFactory();
 
-        $this->setExpectedException(ServiceNotCreatedException::class, 'does not resolve to a known service');
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage('does not resolve to a known service');
         $listener = $factory($container->reveal());
     }
 
@@ -104,7 +105,8 @@ class HttpCacheListenerFactoryTest extends TestCase
 
         $factory  = new HttpCacheListenerFactory();
 
-        $this->setExpectedException(ServiceNotCreatedException::class, 'requires a valid');
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage('requires a valid');
         $listener = $factory($container->reveal());
     }
 
