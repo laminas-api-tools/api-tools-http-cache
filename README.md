@@ -1,7 +1,8 @@
 ZF Http Cache
 =============
 
-[![Build Status](https://travis-ci.org/zfcampus/zf-http-cache.png)](https://travis-ci.org/zfcampus/zf-http-cache)
+[![Build Status](https://secure.travis-ci.org/zfcampus/zf-http-cache.svg?branch=master)](https://secure.travis-ci.org/zfcampus/zf-http-cache)
+[![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-http-cache/badge.svg?branch=master)](https://coveralls.io/github/zfcampus/zf-http-cache?branch=master)
 
 Introduction
 ------------

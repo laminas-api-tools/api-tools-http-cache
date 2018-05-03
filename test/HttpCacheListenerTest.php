@@ -1,7 +1,10 @@
 <?php
 namespace ZFTest\HttpCache;
 
+use DateTime;
+use DateTimeZone;
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
@@ -12,7 +15,7 @@ use ZF\HttpCache\DefaultETagGenerator;
 use ZF\HttpCache\ETagGeneratorInterface;
 use ZF\HttpCache\HttpCacheListener;
 
-class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
+class HttpCacheListenerTest extends TestCase
 {
     /**
      * @var HttpCacheListener
@@ -36,7 +39,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     protected function calculateDate($seconds)
     {
         $seconds += $_SERVER['REQUEST_TIME'];
-        $date = new \DateTime("@{$seconds}", new \DateTimeZone('GMT'));
+        $date = new \DateTime("@{$seconds}", new DateTimeZone('GMT'));
 
         return $date->format('D, d M Y H:i:s \G\M\T');
     }
@@ -810,8 +813,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('Expires', $headers);
 
-        $date   = new \DateTime($headers['Expires']);
-        $exDate = new \DateTime($exHeaders['Expires']);
+        $date   = new DateTime($headers['Expires']);
+        $exDate = new DateTime($exHeaders['Expires']);
 
         $this->assertEquals($exDate, $date, '', 3);
     }
