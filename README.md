@@ -1,13 +1,13 @@
-ZF Http Cache
+Laminas Http Cache
 =============
 
-[![Build Status](https://secure.travis-ci.org/zfcampus/zf-http-cache.svg?branch=master)](https://secure.travis-ci.org/zfcampus/zf-http-cache)
-[![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-http-cache/badge.svg?branch=master)](https://coveralls.io/github/zfcampus/zf-http-cache?branch=master)
+[![Build Status](https://travis-ci.org/laminas-api-tools/api-tools-http-cache.svg?branch=master)](https://travis-ci.org/laminas-api-tools/api-tools-http-cache)
+[![Coverage Status](https://coveralls.io/repos/github/laminas-api-tools/api-tools-http-cache/badge.svg?branch=master)](https://coveralls.io/github/laminas-api-tools/api-tools-http-cache?branch=master)
 
 Introduction
 ------------
 
-`zf-http-cache` is a ZF2 module for automating http-cache tasks within a Zend Framework 2
+`api-tools-http-cache` is a Laminas module for automating http-cache tasks within a Laminas
 application.
 
 Installation
@@ -16,14 +16,14 @@ Installation
 Run the following `composer` command:
 
 ```console
-$ composer require "zfcampus/zf-http-cache:^1.0"
+$ composer require "laminas-api-tools/api-tools-http-cache:^1.0"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "zfcampus/zf-http-cache": "^1.0"
+    "laminas-api-tools/api-tools-http-cache": "^1.0"
 }
 ```
 
@@ -38,7 +38,7 @@ return [
     /* ... */
     'modules' => [
         /* ... */
-        'ZF\HttpCache',
+        'Laminas\ApiTools\HttpCache',
     ],
     /* ... */
 ];
@@ -51,7 +51,7 @@ Configuration
 
 **As a rule of thumb, avoid as much as possible using anonymous functions since it prevents you from caching your configuration.** 
 
-The top-level configuration key for user configuration of this module is `zf-http-cache`.
+The top-level configuration key for user configuration of this module is `api-tools-http-cache`.
 
 The `config/module.config.php` file contains a self-explanative example of configuration.
 
@@ -72,7 +72,7 @@ Example:
 
 ```php
 // See `config/module.config.php` for a complete commented example
-'zf-http-cache' => [
+'api-tools-http-cache' => [
     /* ... */
     'controllers' => [
         '<controller>' => [
@@ -93,7 +93,7 @@ Example:
 Either 
 
 - a concatenation of `$controller::$action` 
-- a controller name (as returned by `Zend\Mvc\MvcEvent::getRouteMatch()->getParam('controller')`;
+- a controller name (as returned by `Laminas\Mvc\MvcEvent::getRouteMatch()->getParam('controller')`;
   the value is case-sensitive) 
 - a regexp (see `<regex_delimiter>` key)
 - a wildcard
@@ -102,7 +102,7 @@ A wildcard matches any unspecified controllers.
 
 ##### Key: `<http-method>` 
 
-Either a lower cased HTTP method (`get`, `post`, etc.) (as returned by `Zend\Http\Request::getMethod()`) or a wildcard.
+Either a lower cased HTTP method (`get`, `post`, etc.) (as returned by `Laminas\Http\Request::getMethod()`) or a wildcard.
 
 A wildcard stands for all the non-specified HTTP methods.
 
@@ -121,7 +121,7 @@ For ETags you can specify a custom generator in the configuration:
 ],
 ```
 
-A generator example can be found in `\ZF\HttpCache\DefaultETagGenerator`. 
+A generator example can be found in `\Laminas\ApiTools\HttpCache\DefaultETagGenerator`. 
 
 
 ##### Key: `<cache-header-value>`
@@ -143,7 +143,7 @@ If you no longer need this module, rather consider removing the module from the 
 Example:
 
 ```php
-'zf-http-cache' => [
+'api-tools-http-cache' => [
     /* ... */
     'enable' => true, // Cache module is enabled.
     /* ... */
@@ -158,7 +158,7 @@ Defaults to all others than `200`.
 Example:
 
 ```php
-'zf-http-cache' => [
+'api-tools-http-cache' => [
     /* ... */
     'http_codes_black_list' => ['201', '304', '400', '500'], // Whatever the other configurations, the responses with these HTTP codes won't be cached.
     /* ... */
@@ -182,7 +182,7 @@ Regexp wins over wildcard.
 Example:
 
 ```php
-'zf-http-cache' => [
+'api-tools-http-cache' => [
     /* ... */
     'regex_delimiter' => '~',
     /* ... */
@@ -202,16 +202,16 @@ The following configuration is provided in `config/module.config.php`:
 ```php
 'service_manager' => [
     'factories' => [
-        'ZF\HttpCache\HttpCacheListener' => 'ZF\HttpCache\HttpCacheListenerFactory',
+        'Laminas\ApiTools\HttpCache\HttpCacheListener' => 'Laminas\ApiTools\HttpCache\HttpCacheListenerFactory',
     ],
 ],
 ```
 
-ZF2 Events
+Laminas Events
 ----------
 
 ### Listeners
 
-#### `ZF\HttpCache\HttpCacheListener`
+#### `Laminas\ApiTools\HttpCache\HttpCacheListener`
 
 This listener is attached to the `MvcEvent::EVENT_ROUTE` and `MvcEvent::EVENT_FINISH` events with the low priority of `-10000`.
