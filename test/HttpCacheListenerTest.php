@@ -1,11 +1,11 @@
 <?php
-namespace ZFTest\HttpCache;
+namespace LaminasTest\ApiTools\HttpCache;
 
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use ZF\HttpCache\HttpCacheListener;
+use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch;
 
 class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -437,7 +437,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::checkStatusCode
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::checkStatusCode
      * @dataProvider checkStatusCodeDataProvider
      *
      * @param array   $config
@@ -467,11 +467,11 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     {
         $ret = call_user_func_array(array($this->instance, $method), $args);
 
-        $this->assertInstanceOf('\ZF\HttpCache\HttpCacheListener', $ret);
+        $this->assertInstanceOf('\Laminas\ApiTools\HttpCache\HttpCacheListener', $ret);
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::onResponse
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onResponse
      * @dataProvider onResponseDataProvider
      */
     public function testOnResponse()
@@ -480,8 +480,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::hasCacheConfig
-     * @covers \ZF\HttpCache\HttpCacheListener::onRoute
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::hasCacheConfig
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onRoute
      * @dataProvider configDataProvider
      *
      * @param array  $config
@@ -511,7 +511,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setCacheControl
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setCacheControl
      * @dataProvider setCacheControlDataProvider
      *
      * @param array $cacheConfig
@@ -532,7 +532,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setExpires
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setExpires
      * @dataProvider setExpiresDataProvider
      *
      * @param array $cacheConfig
@@ -553,7 +553,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setPragma
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setPragma
      * @dataProvider setPragmaDataProvider
      *
      * @param array $cacheConfig
@@ -574,7 +574,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setvary
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setVaryDataProvider
      *
      * @param array $cacheConfig

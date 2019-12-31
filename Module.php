@@ -1,5 +1,5 @@
 <?php
-namespace ZF\HttpCache;
+namespace Laminas\ApiTools\HttpCache;
 
 class Module
 {
@@ -8,7 +8,7 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return array('Zend\Loader\StandardAutoloader' => array('namespaces' => array(
+        return array('Laminas\Loader\StandardAutoloader' => array('namespaces' => array(
             __NAMESPACE__ => __DIR__ . '/src/',
         )));
     }
@@ -30,6 +30,6 @@ class Module
         $em  = $app->getEventManager();
         $sm  = $app->getServiceManager();
 
-        $em->attachAggregate($sm->get('ZF\HttpCache\HttpCacheListener'));
+        $em->attachAggregate($sm->get('Laminas\ApiTools\HttpCache\HttpCacheListener'));
     }
 }

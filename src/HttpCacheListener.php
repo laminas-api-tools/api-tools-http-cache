@@ -1,13 +1,13 @@
 <?php
-namespace ZF\HttpCache;
+namespace Laminas\ApiTools\HttpCache;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\AbstractListenerAggregate;
-use Zend\Http\Header;
-use Zend\Http\Headers;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\MvcEvent;
+use Laminas\EventManager\AbstractListenerAggregate;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Http\Header;
+use Laminas\Http\Headers;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Since caching dynamic or not intended for caching
@@ -223,7 +223,7 @@ class HttpCacheListener extends AbstractListenerAggregate
             $expires = new Header\Expires();
             try {
                 $expires->setDate($this->cacheConfig['expires']['value']);
-            } catch (\Zend\Http\Header\Exception\InvalidArgumentException $e) {
+            } catch (\Laminas\Http\Header\Exception\InvalidArgumentException $e) {
                 if ($headers->has('date')) {
                     $date = $headers->get('date')->date();
                 } else {
