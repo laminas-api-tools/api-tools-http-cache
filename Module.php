@@ -1,5 +1,5 @@
 <?php
-namespace ZF\HttpCache;
+namespace Laminas\ApiTools\HttpCache;
 
 class Module
 {
@@ -8,7 +8,7 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return [Zend\Loader\StandardAutoloader::class => ['namespaces' => [
+        return [Laminas\Loader\StandardAutoloader::class => ['namespaces' => [
             __NAMESPACE__ => __DIR__.'/src/',
         ]]];
     }
@@ -21,7 +21,7 @@ class Module
         return include __DIR__.'/config/module.config.php';
     }
 
-    public function onBootstrap(\Zend\Mvc\MvcEvent $e)
+    public function onBootstrap(\Laminas\Mvc\MvcEvent $e)
     {
         $app = $e->getApplication();
         $em  = $app->getEventManager();

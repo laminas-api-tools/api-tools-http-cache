@@ -1,8 +1,8 @@
 <?php
-namespace ZF\HttpCache;
+namespace Laminas\ApiTools\HttpCache;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class HttpCacheListenerFactory implements FactoryInterface
 {
@@ -15,8 +15,8 @@ class HttpCacheListenerFactory implements FactoryInterface
         $config = [];
         if ($serviceLocator->has('Config')) {
             $config = $serviceLocator->get('Config');
-            if (isset($config['zf-http-cache'])) {
-                $config = $config['zf-http-cache'];
+            if (isset($config['api-tools-http-cache'])) {
+                $config = $config['api-tools-http-cache'];
             }
         }
 

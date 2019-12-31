@@ -1,6 +1,6 @@
 <?php
-use ZF\HttpCache\HttpCacheListener;
-use ZF\HttpCache\HttpCacheListenerFactory;
+use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\ApiTools\HttpCache\HttpCacheListenerFactory;
 
 return [
     'service_manager' => [
@@ -9,7 +9,7 @@ return [
         ],
     ],
 
-    'zf-http-cache' => [
+    'api-tools-http-cache' => [
     //    'controllers' => [
     //        /*
     //         * Wildcards: in the example below all the responses for the controllers
