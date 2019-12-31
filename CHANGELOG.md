@@ -18,9 +18,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#6](https://github.com/zfcampus/zf-http-cache/pull/6) fixes the
+- [zfcampus/zf-http-cache#6](https://github.com/zfcampus/zf-http-cache/pull/6) fixes the
   `HttpCacheListenerFactory` to rename the `createService()` to `__invoke()`,
-  as originally intended in #4.
+  as originally intended in zfcampus/zf-http-cache#4.
 
 ## 1.2.1 - 2015-11-10
 
@@ -38,15 +38,15 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#5](https://github.com/zfcampus/zf-http-cache/pull/5) fixes missing imports,
+- [zfcampus/zf-http-cache#5](https://github.com/zfcampus/zf-http-cache/pull/5) fixes missing imports,
   and ensures all code files have appropriate file-level license docblocks.
 
 ## 1.2.0 - 2015-11-10
 
 ### Added
 
-- [#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the minimum
-  required PHP version to 5.5, and the minimum ZF component versions to 2.5.
+- [zfcampus/zf-http-cache#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the minimum
+  required PHP version to 5.5, and the minimum Laminas component versions to 2.5.
 
 ### Deprecated
 
@@ -58,7 +58,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
-  be forwards-compatible with the upcoming v3 of zend-eventmanager.
-- [#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
-  be forwards-compatible with v2.6 and v3 of zend-servicemanager.
+- [zfcampus/zf-http-cache#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
+  be forwards-compatible with the upcoming v3 of laminas-eventmanager.
+- [zfcampus/zf-http-cache#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
+  be forwards-compatible with v2.6 and v3 of laminas-servicemanager.
