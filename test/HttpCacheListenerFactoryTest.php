@@ -1,18 +1,20 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\HttpCache;
+namespace LaminasTest\ApiTools\HttpCache;
 
 use Interop\Container\ContainerInterface;
+use Laminas\ApiTools\HttpCache\DefaultETagGenerator;
+use Laminas\ApiTools\HttpCache\ETagGeneratorInterface;
+use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\ApiTools\HttpCache\HttpCacheListenerFactory;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use ZF\HttpCache\DefaultETagGenerator;
-use ZF\HttpCache\ETagGeneratorInterface;
-use ZF\HttpCache\HttpCacheListener;
-use ZF\HttpCache\HttpCacheListenerFactory;
 
 class HttpCacheListenerFactoryTest extends TestCase
 {
@@ -30,7 +32,7 @@ class HttpCacheListenerFactoryTest extends TestCase
     public function testFactoryWillUseConfigServiceWhenPresentToCreateListener()
     {
         $config = [
-            'zf-http-cache' => [
+            'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
                 'http_codes_black_list' => [ 201, 404 ],
@@ -45,7 +47,7 @@ class HttpCacheListenerFactoryTest extends TestCase
         $factory  = new HttpCacheListenerFactory();
         $listener = $factory($container->reveal());
         $this->assertInstanceOf(HttpCacheListener::class, $listener);
-        $this->assertAttributeSame($config['zf-http-cache'], 'config', $listener);
+        $this->assertAttributeSame($config['api-tools-http-cache'], 'config', $listener);
         return $listener;
     }
 
@@ -60,7 +62,7 @@ class HttpCacheListenerFactoryTest extends TestCase
     public function testFactoryWillRaiseAnExceptionIfSpecifiedGeneratorDoesNotResolveToService()
     {
         $config = [
-            'zf-http-cache' => [
+            'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
                 'http_codes_black_list' => [ 201, 404 ],
@@ -85,7 +87,7 @@ class HttpCacheListenerFactoryTest extends TestCase
     public function testFactoryWillRaiseExceptionIfSpecifiedETagGeneratorIsInvalid()
     {
         $config = [
-            'zf-http-cache' => [
+            'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
                 'http_codes_black_list' => [ 201, 404 ],
@@ -113,7 +115,7 @@ class HttpCacheListenerFactoryTest extends TestCase
         $eTagGenerator = $this->prophesize(ETagGeneratorInterface::class)->reveal();
 
         $config = [
-            'zf-http-cache' => [
+            'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
                 'http_codes_black_list' => [ 201, 404 ],

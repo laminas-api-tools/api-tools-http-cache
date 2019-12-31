@@ -7,7 +7,7 @@
     </filter>
 
     <testsuites>
-        <testsuite name="ZF Http Cache Module Tests">
+        <testsuite name="Laminas Http Cache Module Tests">
             <directory>./test</directory>
         </testsuite>
     </testsuites>
