@@ -1,11 +1,13 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
  */
 
-use ZF\HttpCache\HttpCacheListener;
-use ZF\HttpCache\HttpCacheListenerFactory;
+use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\ApiTools\HttpCache\HttpCacheListenerFactory;
 
 return [
     'service_manager' => [
@@ -14,7 +16,7 @@ return [
         ],
     ],
 
-    'zf-http-cache' => [
+    'api-tools-http-cache' => [
     //    'controllers' => [
     //        /*
     //         * Wildcards: in the example below all the responses for the controllers
