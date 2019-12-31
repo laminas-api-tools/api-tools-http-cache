@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#17](https://github.com/zfcampus/zf-http-cache/pull/17) adds support for PHP 7.1 and 7.2.
+- [zfcampus/zf-http-cache#17](https://github.com/zfcampus/zf-http-cache/pull/17) adds support for PHP 7.1 and 7.2.
 
 ### Changed
 
@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- [#17](https://github.com/zfcampus/zf-http-cache/pull/17) removes support for HHVM.
+- [zfcampus/zf-http-cache#17](https://github.com/zfcampus/zf-http-cache/pull/17) removes support for HHVM.
 
 ### Fixed
 
@@ -28,23 +28,23 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#11](https://github.com/zfcampus/zf-http-cache/pull/11) adds ETag support.
+- [zfcampus/zf-http-cache#11](https://github.com/zfcampus/zf-http-cache/pull/11) adds ETag support.
   A default generator that uses MD5 hashing of content for comparisons; if
   content matches, an empty 304 response is returned with a `Not-Modified`
   header. By default, it will not overwrite any ETag headers you already send,
-  though you can override that via the `zf-http-cache.etag.override` flag.
+  though you can override that via the `api-tools-http-cache.etag.override` flag.
   Additionally, you can provide alternate ETag generation mechanisms by
-  implementing `ZF\HttpCache\ETagGeneratorInterface`, and specifying the service
-  name of your implementation via the `zf-http-cache.etag.generator`
+  implementing `Laminas\ApiTools\HttpCache\ETagGeneratorInterface`, and specifying the service
+  name of your implementation via the `api-tools-http-cache.etag.generator`
   configuration value.
-- [#13](https://github.com/zfcampus/zf-http-cache/pull/13) and
-  [#14](https://github.com/zfcampus/zf-http-cache/pull/14) add support for Zend
-  Framework v3 components, including zend-mvc, zend-servicemanager, and
-  zend-eventmanager.
-- [#14](https://github.com/zfcampus/zf-http-cache/pull/14) marks the package as
-  a ZF module, allowing zf-component-installer to auto-inject it into
+- [zfcampus/zf-http-cache#13](https://github.com/zfcampus/zf-http-cache/pull/13) and
+  [zfcampus/zf-http-cache#14](https://github.com/zfcampus/zf-http-cache/pull/14) add support for Laminas
+  Framework v3 components, including laminas-mvc, laminas-servicemanager, and
+  laminas-eventmanager.
+- [zfcampus/zf-http-cache#14](https://github.com/zfcampus/zf-http-cache/pull/14) marks the package as
+  a Laminas module, allowing laminas-component-installer to auto-inject it into
   application configuration.
-- [#12](https://github.com/zfcampus/zf-http-cache/pull/12) adds more
+- [zfcampus/zf-http-cache#12](https://github.com/zfcampus/zf-http-cache/pull/12) adds more
   capabilities around matching routed controllers, including the ability to
   match:
   - the route name
@@ -60,7 +60,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- [#14](https://github.com/zfcampus/zf-http-cache/pull/14) removes support for
+- [zfcampus/zf-http-cache#14](https://github.com/zfcampus/zf-http-cache/pull/14) removes support for
   PHP 5.5.
 
 ### Fixed
@@ -79,12 +79,12 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- [#10](https://github.com/zfcampus/zf-http-cache/pull/10) removes the
-  dependency on zend-loader (it was not being used).
+- [zfcampus/zf-http-cache#10](https://github.com/zfcampus/zf-http-cache/pull/10) removes the
+  dependency on laminas-loader (it was not being used).
 
 ### Fixed
 
-- [#8](https://github.com/zfcampus/zf-http-cache/pull/8) provides some
+- [zfcampus/zf-http-cache#8](https://github.com/zfcampus/zf-http-cache/pull/8) provides some
   performance optimizations for a number of conditional statements.
 
 ## 1.2.2 - 2015-11-11
@@ -103,9 +103,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#6](https://github.com/zfcampus/zf-http-cache/pull/6) fixes the
+- [zfcampus/zf-http-cache#6](https://github.com/zfcampus/zf-http-cache/pull/6) fixes the
   `HttpCacheListenerFactory` to rename the `createService()` to `__invoke()`,
-  as originally intended in #4.
+  as originally intended in zfcampus/zf-http-cache#4.
 
 ## 1.2.1 - 2015-11-10
 
@@ -123,15 +123,15 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#5](https://github.com/zfcampus/zf-http-cache/pull/5) fixes missing imports,
+- [zfcampus/zf-http-cache#5](https://github.com/zfcampus/zf-http-cache/pull/5) fixes missing imports,
   and ensures all code files have appropriate file-level license docblocks.
 
 ## 1.2.0 - 2015-11-10
 
 ### Added
 
-- [#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the minimum
-  required PHP version to 5.5, and the minimum ZF component versions to 2.5.
+- [zfcampus/zf-http-cache#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the minimum
+  required PHP version to 5.5, and the minimum Laminas component versions to 2.5.
 
 ### Deprecated
 
@@ -143,7 +143,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
-  be forwards-compatible with the upcoming v3 of zend-eventmanager.
-- [#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
-  be forwards-compatible with v2.6 and v3 of zend-servicemanager.
+- [zfcampus/zf-http-cache#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
+  be forwards-compatible with the upcoming v3 of laminas-eventmanager.
+- [zfcampus/zf-http-cache#3](https://github.com/zfcampus/zf-http-cache/pull/3) updates the code to
+  be forwards-compatible with v2.6 and v3 of laminas-servicemanager.
