@@ -1,36 +1,49 @@
-{    
+{
+    "name": "corentin-larose/api-tools-http-cache",
+    "description": "Laminas Module providing http cache headers support",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "api-tools",
+        "module",
+        "cache"
+    ],
+    "homepage": "https://api-tools.getlaminas.org",
+    "support": {
+        "docs": "https://api-tools.getlaminas.org/documentation",
+        "issues": "https://github.com/laminas-api-tools/api-tools-http-cache/issues",
+        "source": "https://github.com/laminas-api-tools/api-tools-http-cache",
+        "rss": "https://github.com/laminas-api-tools/api-tools-http-cache/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "config": {
+        "bin-dir": "vendor/bin",
+        "process-timeout": 3600,
+        "sort-packages": true
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "laminas/laminas-eventmanager": "~2.3",
+        "laminas/laminas-http": "~2.3",
+        "laminas/laminas-mvc": "~2.3",
+        "laminas/laminas-zendframework-bridge": "^1.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "*@dev",
+        "laminas/laminas-loader": "~2.3",
+        "phpunit/phpunit": "4.1.*"
+    },
     "autoload": {
         "psr-4": {
-            "ZF\\HttpCache\\": "src/",
-            "ZFTest\\HttpCache\\": "test/"
+            "Laminas\\ApiTools\\HttpCache\\": "src/",
+            "LaminasTest\\ApiTools\\HttpCache\\": "test/"
         },
         "classmap": [
             "Module.php"
         ]
     },
-    "config": {
-        "bin-dir" : "vendor/bin",
-        "process-timeout" : 3600
-    }, 
-    "description": "ZF2 Module providing http cache headers support",
-    "keywords": [
-        "zf2",
-        "zend",
-        "module",
-        "cache"
-    ],
-    "license": "BSD-3-Clause",
-    "name": "corentin-larose/zf-http-cache",
-    "require": {
-        "php": ">=5.3.23",
-        "zendframework/zend-eventmanager": "~2.3",
-        "zendframework/zend-http": "~2.3",
-        "zendframework/zend-mvc": "~2.3"
-    },
-    "require-dev": {
-        "fabpot/php-cs-fixer": "*@dev",
-        "phpunit/phpunit": "4.1.*",
-        "zendframework/zend-loader": "~2.3"
-    },
-    "type": "library"
+    "replace": {
+        "corentin-larose/zf-http-cache": "self.version"
+    }
 }

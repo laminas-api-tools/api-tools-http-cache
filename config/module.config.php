@@ -2,11 +2,11 @@
 return array(
     'service_manager' => array(
         'factories' => array(
-            'ZF\HttpCache\HttpCacheListener' => 'ZF\HttpCache\HttpCacheListenerFactory',
+            'Laminas\ApiTools\HttpCache\HttpCacheListener' => 'Laminas\ApiTools\HttpCache\HttpCacheListenerFactory',
         ),
     ),
 
-    'zf-http-cache' => array(
+    'api-tools-http-cache' => array(
     //    'controllers' => array(
     //        /*
     //         * Wildcards: in the example below all the responses for the controllers
