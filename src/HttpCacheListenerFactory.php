@@ -1,13 +1,15 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\HttpCache;
+namespace Laminas\ApiTools\HttpCache;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 
 class HttpCacheListenerFactory
 {
@@ -15,7 +17,7 @@ class HttpCacheListenerFactory
      * Factory for producing an HttpCacheListener.
      *
      * Duck-types on the $container type to allow usage with
-     * zend-servicemanager versions 2.5+ and 3.0+.
+     * laminas-servicemanager versions 2.5+ and 3.0+.
      *
      * @param  ContainerInterface $container
      * @return HttpCacheListener
@@ -25,8 +27,8 @@ class HttpCacheListenerFactory
         $config = [];
         if ($container->has('config')) {
             $config = $container->get('config');
-            if (isset($config['zf-http-cache'])) {
-                $config = $config['zf-http-cache'];
+            if (isset($config['api-tools-http-cache'])) {
+                $config = $config['api-tools-http-cache'];
             }
         }
 
@@ -58,7 +60,7 @@ class HttpCacheListenerFactory
         if (! $container->has($config['etag']['generator'])) {
             throw new ServiceNotCreatedException(sprintf(
                 'ETag generator specified ("%s") does not resolve to a known service; '
-                . 'please check your zf-http-cache.etag.generator configuration',
+                . 'please check your api-tools-http-cache.etag.generator configuration',
                 $config['etag']['generator']
             ));
         }

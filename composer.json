@@ -1,43 +1,22 @@
 {
-    "name": "zfcampus/zf-http-cache",
-    "description": "ZF2 Module providing http cache headers support",
+    "name": "laminas-api-tools/api-tools-http-cache",
+    "description": "Laminas Module providing http cache headers support",
     "license": "BSD-3-Clause",
     "keywords": [
-        "zendframework",
+        "laminas",
+        "api-tools",
         "api",
-        "apigility",
-        "zf",
-        "zend",
         "module",
         "cache"
     ],
+    "homepage": "https://api-tools.getlaminas.org",
     "support": {
-        "issues": "https://github.com/zfcampus/zf-http-cache/issues",
-        "source": "https://github.com/zfcampus/zf-http-cache",
-        "rss": "https://github.com/zfcampus/zf-http-cache/releases.atom",
-        "chat": "https://zendframework-slack.herokuapp.com",
-        "forum": "https://discourse.zendframework.com/c/questions/apigility"
-    },
-    "require": {
-        "php": "^5.6 || ^7.0",
-        "zendframework/zend-eventmanager": "^2.6.3 || ^3.0.1",
-        "zendframework/zend-http": "^2.5.4",
-        "zendframework/zend-mvc": "^2.7.15 || ^3.0.2"
-    },
-    "require-dev": {
-        "container-interop/container-interop": "^1.1",
-        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5",
-        "zendframework/zend-coding-standard": "~1.0.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "ZF\\HttpCache\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ZFTest\\HttpCache\\": "test/"
-        }
+        "docs": "https://api-tools.getlaminas.org/documentation",
+        "issues": "https://github.com/laminas-api-tools/api-tools-http-cache/issues",
+        "source": "https://github.com/laminas-api-tools/api-tools-http-cache",
+        "rss": "https://github.com/laminas-api-tools/api-tools-http-cache/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
     },
     "config": {
         "sort-packages": true
@@ -47,8 +26,30 @@
             "dev-master": "1.4.x-dev",
             "dev-develop": "1.5.x-dev"
         },
-        "zf": {
-            "module": "ZF\\HttpCache"
+        "laminas": {
+            "module": "Laminas\\ApiTools\\HttpCache"
+        }
+    },
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
+        "laminas/laminas-http": "^2.5.4",
+        "laminas/laminas-mvc": "^2.7.15 || ^3.0.2",
+        "laminas/laminas-zendframework-bridge": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/container-interop": "^1.1",
+        "laminas/laminas-coding-standard": "~1.0.0",
+        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laminas\\ApiTools\\HttpCache\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaminasTest\\ApiTools\\HttpCache\\": "test/"
         }
     },
     "scripts": {
@@ -61,12 +62,7 @@
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },
-    "homepage": "http://apigility.org/",
-    "authors": [
-        {
-            "homepage": "https://github.com/corentin-larose/",
-            "name": "Corentin Larose",
-            "role": "Developer"
-        }
-    ]
+    "replace": {
+        "zfcampus/zf-http-cache": "self.version"
+    }
 }

@@ -1,12 +1,14 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
  */
 
-use ZF\HttpCache\DefaultETagGenerator;
-use ZF\HttpCache\HttpCacheListener;
-use ZF\HttpCache\HttpCacheListenerFactory;
+use Laminas\ApiTools\HttpCache\DefaultETagGenerator;
+use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\ApiTools\HttpCache\HttpCacheListenerFactory;
 
 return [
     'service_manager' => [
@@ -15,7 +17,7 @@ return [
         ],
     ],
 
-    'zf-http-cache' => [
+    'api-tools-http-cache' => [
     //    'controllers' => [
     //        /*
     //         * Wildcards: in the example below all the responses for the controllers
@@ -95,7 +97,7 @@ return [
     //                // Vary: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
     //                'etag' => [
     //                    'override' => false, // Whether to override etag header if already present in response
-    //                    'generator' => '\ZF\HttpCache\DefaultETagGenerator', // what etag generator to use, must implement \ZF\HttpCache\EtagGeneratorInterface
+    //                    'generator' => '\Laminas\ApiTools\HttpCache\DefaultETagGenerator', // what etag generator to use, must implement \Laminas\ApiTools\HttpCache\EtagGeneratorInterface
     //                ],
     //            ],
     //        ],

@@ -1,19 +1,19 @@
 <?php
-namespace ZFTest\HttpCache;
+namespace LaminasTest\ApiTools\HttpCache;
 
 use DateTime;
 use DateTimeZone;
 use Interop\Container\ContainerInterface;
+use Laminas\ApiTools\HttpCache\DefaultETagGenerator;
+use Laminas\ApiTools\HttpCache\ETagGeneratorInterface;
+use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch as V2RouteMatch;
+use Laminas\Router\RouteMatch;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
-use Zend\Router\RouteMatch;
-use ZF\HttpCache\DefaultETagGenerator;
-use ZF\HttpCache\ETagGeneratorInterface;
-use ZF\HttpCache\HttpCacheListener;
 
 class HttpCacheListenerTest extends TestCase
 {
@@ -670,7 +670,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::checkStatusCode
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::checkStatusCode
      * @dataProvider checkStatusCodeDataProvider
      *
      * @param array   $config
@@ -704,7 +704,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::onResponse
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onResponse
      * @dataProvider onResponseDataProvider
      *
      * @param array  $config
@@ -735,7 +735,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::onRoute
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onRoute
      * @dataProvider configDataProvider
      *
      * @param array  $config
@@ -771,7 +771,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setCacheControl
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setCacheControl
      * @dataProvider setCacheControlDataProvider
      *
      * @param array $cacheConfig
@@ -792,7 +792,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setExpires
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setExpires
      * @dataProvider setExpiresDataProvider
      *
      * @param array $cacheConfig
@@ -820,7 +820,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setPragma
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setPragma
      * @dataProvider setPragmaDataProvider
      *
      * @param array $cacheConfig
@@ -841,7 +841,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setvary
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setVaryDataProvider
      *
      * @param array $cacheConfig
@@ -863,7 +863,7 @@ class HttpCacheListenerTest extends TestCase
 
 
     /**
-     * @covers \ZF\HttpCache\HttpCacheListener::setETag
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setETag
      * @dataProvider setEtagDataProvider
      *
      * @param array $cacheConfig
@@ -905,7 +905,7 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @covers       \ZF\HttpCache\HttpCacheListener::setvary
+     * @covers       \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setNotModifiedDataProvider
      *
      * @param array $requestHeaders
