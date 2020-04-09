@@ -463,7 +463,7 @@ class HttpCacheListenerTest extends TestCase
                     'override' => true,
                     'value'    => 'max-age=86400, must-revalidate, public',
                 ]],
-                ['Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, no-cache, public'],
                 ['Cache-Control' => 'max-age=86400, must-revalidate, public'],
             ],
             [
@@ -471,8 +471,8 @@ class HttpCacheListenerTest extends TestCase
                     'override' => false,
                     'value'    => 'max-age=86400, must-revalidate, public',
                 ]],
-                ['Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'],
-                ['Cache-Control' => 'max-age=86400, must-revalidate, public, no-cache'],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, no-cache, public'],
+                ['Cache-Control' => 'max-age=86400, must-revalidate, no-cache, public'],
             ],
         ];
     }
