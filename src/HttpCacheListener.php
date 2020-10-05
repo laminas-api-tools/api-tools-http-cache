@@ -82,6 +82,9 @@ class HttpCacheListener extends AbstractListenerAggregate
         return ! empty($this->cacheConfig);
     }
 
+    /**
+     * @return void
+     */
     public function onResponse(MvcEvent $e)
     {
         if (empty($this->config['enable'])) {
@@ -113,6 +116,9 @@ class HttpCacheListener extends AbstractListenerAggregate
             ->setNotModified($request, $response);
     }
 
+    /**
+     * @return void
+     */
     public function onRoute(MvcEvent $e)
     {
         if (empty($this->config['enable'])) {

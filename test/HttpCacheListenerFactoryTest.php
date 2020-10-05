@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class HttpCacheListenerFactoryTest extends TestCase
 {
-    public function testFactoryCreatesListenerWhenNoConfigServiceIsPresent()
+    public function testFactoryCreatesListenerWhenNoConfigServiceIsPresent(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container
@@ -58,12 +58,13 @@ class HttpCacheListenerFactoryTest extends TestCase
     /**
      * @depends testFactoryWillUseConfigServiceWhenPresentToCreateListener
      */
-    public function testFactoryWillSetDefaultETagGeneratorIfNoneIsSpecifiedInConfiguration(HttpCacheListener $listener)
-    {
+    public function testFactoryWillSetDefaultETagGeneratorIfNoneIsSpecifiedInConfiguration(
+        HttpCacheListener $listener
+    ): void {
         $this->assertInstanceOf(ETagGeneratorInterface::class, $listener->getETagGenerator());
     }
 
-    public function testFactoryWillRaiseAnExceptionIfSpecifiedGeneratorDoesNotResolveToService()
+    public function testFactoryWillRaiseAnExceptionIfSpecifiedGeneratorDoesNotResolveToService(): void
     {
         $config = [
             'api-tools-http-cache' => [
@@ -97,7 +98,7 @@ class HttpCacheListenerFactoryTest extends TestCase
         $factory($container);
     }
 
-    public function testFactoryWillRaiseExceptionIfSpecifiedETagGeneratorIsInvalid()
+    public function testFactoryWillRaiseExceptionIfSpecifiedETagGeneratorIsInvalid(): void
     {
         $config = [
             'api-tools-http-cache' => [
@@ -130,7 +131,7 @@ class HttpCacheListenerFactoryTest extends TestCase
         $factory($container);
     }
 
-    public function testFactoryWillInjectSpecifiedETagGenerator()
+    public function testFactoryWillInjectSpecifiedETagGenerator(): void
     {
         $eTagGenerator = $this->createMock(ETagGeneratorInterface::class);
 
