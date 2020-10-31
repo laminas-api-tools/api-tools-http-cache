@@ -27,7 +27,7 @@ class HttpCacheListener extends AbstractListenerAggregate
     /** @var array */
     protected $cacheConfig = [];
 
-    /** @var array */
+    /** @var array<string,mixed> */
     protected $config = [];
 
     /** @var ETagGeneratorInterface */
@@ -224,7 +224,7 @@ class HttpCacheListener extends AbstractListenerAggregate
     /**
      * Sets config.
      *
-     * @param  array $config
+     * @param  array<string,mixed> $config
      * @return self
      */
     public function setConfig(array $config)
@@ -233,9 +233,13 @@ class HttpCacheListener extends AbstractListenerAggregate
         return $this;
     }
 
-    /**
-     * @return self
-     */
+    /** @return array<string,mixed> */
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    /** @return self */
     public function setExpires(Headers $headers)
     {
         if (
@@ -345,5 +349,10 @@ class HttpCacheListener extends AbstractListenerAggregate
         }
 
         return $this;
+    }
+
+    public function getETagGenerator(): ETagGeneratorInterface
+    {
+        return $this->eTagGenerator;
     }
 }
