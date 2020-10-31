@@ -1,9 +1,10 @@
 <phpunit bootstrap="./vendor/autoload.php" colors="true">
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+    <coverage>
+        <exclude>
+            <directory suffix=".php">vendor/</directory>
+            <directory suffix=".php">test/</directory>
+        </exclude>
+    </coverage>
 
     <testsuites>
         <testsuite name="Laminas Http Cache Module Tests">
