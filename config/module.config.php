@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
- */
-
 use Laminas\ApiTools\HttpCache\DefaultETagGenerator;
 use Laminas\ApiTools\HttpCache\HttpCacheListener;
 use Laminas\ApiTools\HttpCache\HttpCacheListenerFactory;
