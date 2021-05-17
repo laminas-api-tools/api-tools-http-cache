@@ -1,7 +1,6 @@
 {
     "name": "laminas-api-tools/api-tools-http-cache",
     "description": "Laminas Module providing http cache headers support",
-    "license": "BSD-3-Clause",
     "keywords": [
         "laminas",
         "api-tools",
@@ -10,13 +9,21 @@
         "cache"
     ],
     "homepage": "https://api-tools.getlaminas.org",
-    "support": {
-        "docs": "https://api-tools.getlaminas.org/documentation",
-        "issues": "https://github.com/laminas-api-tools/api-tools-http-cache/issues",
-        "source": "https://github.com/laminas-api-tools/api-tools-http-cache",
-        "rss": "https://github.com/laminas-api-tools/api-tools-http-cache/releases.atom",
-        "chat": "https://laminas.dev/chat",
-        "forum": "https://discourse.laminas.dev"
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
+        "laminas/laminas-http": "^2.5.4",
+        "laminas/laminas-mvc": "^2.7.15 || ^3.0.2",
+        "laminas/laminas-zendframework-bridge": "^1.0"
+    },
+    "replace": {
+        "zfcampus/zf-http-cache": "^1.4.0"
+    },
+    "require-dev": {
+        "container-interop/container-interop": "^1.1",
+        "laminas/laminas-coding-standard": "~1.0.0",
+        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
     },
     "config": {
         "sort-packages": true
@@ -25,18 +32,6 @@
         "laminas": {
             "module": "Laminas\\ApiTools\\HttpCache"
         }
-    },
-    "require": {
-        "php": "^5.6 || ^7.0",
-        "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
-        "laminas/laminas-http": "^2.5.4",
-        "laminas/laminas-mvc": "^2.7.15 || ^3.0.2",
-        "laminas/laminas-zendframework-bridge": "^1.0"
-    },
-    "require-dev": {
-        "container-interop/container-interop": "^1.1",
-        "laminas/laminas-coding-standard": "~1.0.0",
-        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
     },
     "autoload": {
         "psr-4": {
@@ -58,7 +53,12 @@
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     },
-    "replace": {
-        "zfcampus/zf-http-cache": "^1.4.0"
+    "support": {
+        "issues": "https://github.com/laminas-api-tools/api-tools-http-cache/issues",
+        "forum": "https://discourse.laminas.dev",
+        "chat": "https://laminas.dev/chat",
+        "source": "https://github.com/laminas-api-tools/api-tools-http-cache",
+        "docs": "https://api-tools.getlaminas.org/documentation",
+        "rss": "https://github.com/laminas-api-tools/api-tools-http-cache/releases.atom"
     }
 }
