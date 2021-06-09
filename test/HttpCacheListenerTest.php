@@ -9,13 +9,10 @@ use Laminas\ApiTools\HttpCache\HttpCacheListener;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\Router\RouteMatch as V2RouteMatch;
 use Laminas\Router\RouteMatch;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 
 use function call_user_func_array;
-use function class_exists;
 use function md5;
 
 class HttpCacheListenerTest extends TestCase
@@ -23,7 +20,7 @@ class HttpCacheListenerTest extends TestCase
     /** @var HttpCacheListener */
     protected $instance;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->instance = new HttpCacheListener();
     }
@@ -31,9 +28,7 @@ class HttpCacheListenerTest extends TestCase
     /** @return V2RouteMatch|RouteMatch */
     protected function createRouteMatch(array $matches)
     {
-        $class = class_exists(V2RouteMatch::class)
-            ? V2RouteMatch::class
-            : RouteMatch::class;
+        $class = RouteMatch::class;
 
         return new $class($matches);
     }
@@ -844,7 +839,7 @@ class HttpCacheListenerTest extends TestCase
         $date   = new DateTime($headers['Expires']);
         $exDate = new DateTime($exHeaders['Expires']);
 
-        $this->assertEquals($exDate, $date, '', 3);
+        $this->assertEqualsWithDelta($exDate, $date, 3);
     }
 
     /**
@@ -909,10 +904,13 @@ class HttpCacheListenerTest extends TestCase
 
     public function testSetETagGenerator()
     {
-        $testGenerator = $this->prophesize(ETagGeneratorInterface::class);
-        $testGenerator->generate(Argument::any(), Argument::any())->willReturn('generated');
+        $testGenerator = $this->createMock(ETagGeneratorInterface::class);
+        $testGenerator
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn('generated');
 
-        $httpCacheListener = new HttpCacheListener($testGenerator->reveal());
+        $httpCacheListener = new HttpCacheListener($testGenerator);
         $httpCacheListener->setCacheConfig([
             'etag' => [
                 'override'  => true,
