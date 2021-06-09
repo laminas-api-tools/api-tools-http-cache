@@ -35,8 +35,8 @@
     },
     "require-dev": {
         "container-interop/container-interop": "^1.1",
-        "laminas/laminas-coding-standard": "~1.0.0",
-        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
+        "laminas/laminas-coding-standard": "~2.2.0",
+        "phpunit/phpunit": "^7.5.15"
     },
     "autoload": {
         "psr-4": {
