@@ -1,9 +1,8 @@
 <phpunit bootstrap="./vendor/autoload.php" colors="true">
     <filter>
-        <blacklist>
-            <directory suffix=".php">vendor/</directory>
-            <directory suffix=".php">test/</directory>
-        </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
     </filter>
 
     <testsuites>

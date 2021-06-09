@@ -1,15 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\ApiTools\HttpCache;
 
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
+
+use function md5;
 
 class DefaultETagGenerator implements ETagGeneratorInterface
 {

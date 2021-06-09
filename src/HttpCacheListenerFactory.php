@@ -1,15 +1,15 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\ApiTools\HttpCache;
 
+use ArrayAccess;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+
+use function get_class;
+use function gettype;
+use function is_object;
+use function sprintf;
 
 class HttpCacheListenerFactory
 {
@@ -19,7 +19,6 @@ class HttpCacheListenerFactory
      * Duck-types on the $container type to allow usage with
      * laminas-servicemanager versions 2.5+ and 3.0+.
      *
-     * @param  ContainerInterface $container
      * @return HttpCacheListener
      */
     public function __invoke(ContainerInterface $container)
@@ -41,8 +40,7 @@ class HttpCacheListenerFactory
     /**
      * Returns an instance of an ETag generator.
      *
-     * @param array|\ArrayAccess $config
-     * @param ContainerInterface $container
+     * @param array|ArrayAccess $config
      * @return ETagGeneratorInterface
      * @throws ServiceNotCreatedException If specified etag generator does not
      *     have a corresponding service.
@@ -52,7 +50,8 @@ class HttpCacheListenerFactory
     protected function getETagGenerator($config, ContainerInterface $container)
     {
         // Use custom generator.
-        if (empty($config['etag']['generator'])
+        if (
+            empty($config['etag']['generator'])
         ) {
             return new DefaultETagGenerator();
         }
@@ -72,7 +71,7 @@ class HttpCacheListenerFactory
                 '%s requires a valid %s\ETagGeneratorInterface implementation; specified version was of type %s',
                 HttpCacheListener::class,
                 __NAMESPACE__,
-                (is_object($eTagGenerator) ? get_class($eTagGenerator) : gettype($eTagGenerator))
+                is_object($eTagGenerator) ? get_class($eTagGenerator) : gettype($eTagGenerator)
             ));
         }
 

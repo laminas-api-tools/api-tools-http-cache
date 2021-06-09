@@ -1,22 +1,14 @@
-<?php
+<?php // phpcs:disable Generic.Files.LineLength.TooLong
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
- */
-
-use Laminas\ApiTools\HttpCache\DefaultETagGenerator;
 use Laminas\ApiTools\HttpCache\HttpCacheListener;
 use Laminas\ApiTools\HttpCache\HttpCacheListenerFactory;
 
 return [
-    'service_manager' => [
+    'service_manager'      => [
         'factories' => [
             HttpCacheListener::class => HttpCacheListenerFactory::class,
         ],
     ],
-
     'api-tools-http-cache' => [
     //    'controllers' => [
     //        /*
@@ -29,7 +21,7 @@ return [
     //         * configured controller will have the same behavior.
     //         */
     //        '*' => [ // No cache by default
-    //    	      '*' => [
+    //            '*' => [
     //                'cache-control' => [
     //                    'override' => false,
     //                    'value'    => 'private',

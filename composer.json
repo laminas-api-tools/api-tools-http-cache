@@ -27,7 +27,7 @@
         }
     },
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.3",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
         "laminas/laminas-http": "^2.5.4",
         "laminas/laminas-mvc": "^2.7.15 || ^3.0.2",
@@ -35,8 +35,8 @@
     },
     "require-dev": {
         "container-interop/container-interop": "^1.1",
-        "laminas/laminas-coding-standard": "~1.0.0",
-        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
+        "laminas/laminas-coding-standard": "~2.2.0",
+        "phpunit/phpunit": "^7.5.15"
     },
     "autoload": {
         "psr-4": {
