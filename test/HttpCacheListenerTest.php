@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use Laminas\ApiTools\HttpCache\ETagGeneratorInterface;
 use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\Http\Headers;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
@@ -380,7 +381,7 @@ class HttpCacheListenerTest extends TestCase
      *
      * @psalm-return array<array-key, array{
      *     0: string,
-     *     1: array<array-key, array|\Laminas\Http\Headers>
+     *     1: array<array-key, array|Headers>
      * }>
      */
     public function methodsReturnSelfDataProvider(): array
