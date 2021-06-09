@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use Laminas\ApiTools\HttpCache\ETagGeneratorInterface;
 use Laminas\ApiTools\HttpCache\HttpCacheListener;
+use Laminas\Http\Headers;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
@@ -44,9 +45,13 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see checkStatusCode
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, int[]>,
+     *     1: int,
+     *     2: bool
+     * }>
      */
-    public function checkStatusCodeDataProvider()
+    public function checkStatusCodeDataProvider(): array
     {
         return [
             [[], 200, true],
@@ -59,9 +64,15 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see testOnRoute
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, mixed>,
+     *     1: string,
+     *     2: string,
+     *     3: array<string, string>,
+     *     4: array<string, mixed>
+     * }>
      */
-    public function configDataProvider()
+    public function configDataProvider(): array
     {
         return [
             [
@@ -368,9 +379,12 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see testMethodsReturnSelf
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: string,
+     *     1: array<array-key, array|Headers>
+     * }>
      */
-    public function methodsReturnSelfDataProvider()
+    public function methodsReturnSelfDataProvider(): array
     {
         $response = new HttpResponse();
         $headers  = $response->getHeaders();
@@ -388,9 +402,14 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see testOnResponse
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, mixed>,
+     *     1: string,
+     *     2: array<string, string>,
+     *     3: array<string, string>
+     * }>
      */
-    public function onResponseDataProvider()
+    public function onResponseDataProvider(): array
     {
         return [
             [
@@ -435,9 +454,13 @@ class HttpCacheListenerTest extends TestCase
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
      * @see testSetCacheControl
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, array<string, mixed>>,
+     *     1: array<string, string>,
+     *     2: array<string, string>
+     * }>
      */
-    public function setCacheControlDataProvider()
+    public function setCacheControlDataProvider(): array
     {
         return [
             [
@@ -477,9 +500,13 @@ class HttpCacheListenerTest extends TestCase
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
      * @see testSetExpires
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, array<string, mixed>>,
+     *     1: array<string, string>,
+     *     2: array<string, string>
+     * }>
      */
-    public function setExpiresDataProvider()
+    public function setExpiresDataProvider(): array
     {
         return [
             [
@@ -548,9 +575,13 @@ class HttpCacheListenerTest extends TestCase
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32
      * @see testSetPragma
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, array<string, mixed>>,
+     *     1: array<string, string>,
+     *     2: array<string, string>
+     * }>
      */
-    public function setPragmaDataProvider()
+    public function setPragmaDataProvider(): array
     {
         return [
             [
@@ -590,9 +621,13 @@ class HttpCacheListenerTest extends TestCase
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
      * @see testSetVary
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, array<string, mixed>>,
+     *     1: array<string, string>,
+     *     2: array<string, string>
+     * }>
      */
-    public function setVaryDataProvider()
+    public function setVaryDataProvider(): array
     {
         return [
             [
@@ -632,9 +667,13 @@ class HttpCacheListenerTest extends TestCase
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
      * @see testSetETag
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, mixed>,
+     *     1: array<string, string>,
+     *     2: array<string, string>
+     * }>
      */
-    public function setETagDataProvider()
+    public function setETagDataProvider(): array
     {
         return [
             [
@@ -675,9 +714,13 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see testSetNotModified
      *
-     * @return array
+     * @psalm-return array<array-key, array{
+     *     0: array<string, string>,
+     *     1: array<string, string>,
+     *     2: int
+     * }>
      */
-    public function setNotModifiedDataProvider()
+    public function setNotModifiedDataProvider(): array
     {
         return [
             [
@@ -701,11 +744,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::checkStatusCode
      * @dataProvider checkStatusCodeDataProvider
-     * @param array   $config
-     * @param integer $code
-     * @param boolean $exResult
      */
-    public function testCheckStatusCode(array $config, $code, $exResult)
+    public function testCheckStatusCode(array $config, int $code, bool $exResult): void
     {
         $this->instance->setConfig($config);
 
@@ -720,10 +760,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @coversNothing
      * @dataProvider methodsReturnSelfDataProvider
-     * @param string $method
-     * @param array  $args
      */
-    public function testMethodsReturnsSelf($method, $args)
+    public function testMethodsReturnsSelf(string $method, array $args): void
     {
         $ret = call_user_func_array([$this->instance, $method], $args);
 
@@ -733,12 +771,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onResponse
      * @dataProvider onResponseDataProvider
-     * @param array  $config
-     * @param string $method
-     * @param array  $routeMatch
-     * @param array  $exHeaders
      */
-    public function testOnResponse(array $config, $method, array $routeMatch, array $exHeaders)
+    public function testOnResponse(array $config, string $method, array $routeMatch, array $exHeaders): void
     {
         $request = new HttpRequest();
         $request->setMethod($method);
@@ -763,14 +797,14 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onRoute
      * @dataProvider configDataProvider
-     * @param array  $config
-     * @param string $method
-     * @param string $routeName
-     * @param array  $routeMatch
-     * @param array  $exCacheConfig
      */
-    public function testOnRoute(array $config, $method, $routeName, array $routeMatch, array $exCacheConfig)
-    {
+    public function testOnRoute(
+        array $config,
+        string $method,
+        string $routeName,
+        array $routeMatch,
+        array $exCacheConfig
+    ): void {
         $request = new HttpRequest();
         $request->setMethod($method);
 
@@ -798,11 +832,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setCacheControl
      * @dataProvider setCacheControlDataProvider
-     * @param array $cacheConfig
-     * @param array $headers
-     * @param array $exHeaders
      */
-    public function testSetCacheControl(array $cacheConfig, array $headers, array $exHeaders)
+    public function testSetCacheControl(array $cacheConfig, array $headers, array $exHeaders): void
     {
         $this->instance->setCacheConfig($cacheConfig);
 
@@ -818,11 +849,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setExpires
      * @dataProvider setExpiresDataProvider
-     * @param array $cacheConfig
-     * @param array $headers
-     * @param array $exHeaders
      */
-    public function testSetExpires(array $cacheConfig, array $headers, array $exHeaders)
+    public function testSetExpires(array $cacheConfig, array $headers, array $exHeaders): void
     {
         $this->instance->setCacheConfig($cacheConfig);
 
@@ -845,11 +873,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setPragma
      * @dataProvider setPragmaDataProvider
-     * @param array $cacheConfig
-     * @param array $headers
-     * @param array $exHeaders
      */
-    public function testSetPragma(array $cacheConfig, array $headers, array $exHeaders)
+    public function testSetPragma(array $cacheConfig, array $headers, array $exHeaders): void
     {
         $this->instance->setCacheConfig($cacheConfig);
 
@@ -865,11 +890,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setVaryDataProvider
-     * @param array $cacheConfig
-     * @param array $headers
-     * @param array $exHeaders
      */
-    public function testSetVary(array $cacheConfig, array $headers, array $exHeaders)
+    public function testSetVary(array $cacheConfig, array $headers, array $exHeaders): void
     {
         $this->instance->setCacheConfig($cacheConfig);
 
@@ -885,11 +907,8 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setETag
      * @dataProvider setEtagDataProvider
-     * @param array $cacheConfig
-     * @param array $headers
-     * @param array $exHeaders
      */
-    public function testSetETag(array $cacheConfig, array $headers, array $exHeaders)
+    public function testSetETag(array $cacheConfig, array $headers, array $exHeaders): void
     {
         $this->instance->setCacheConfig($cacheConfig);
 
@@ -902,7 +921,7 @@ class HttpCacheListenerTest extends TestCase
         $this->assertSame($exHeaders, $headers->toArray());
     }
 
-    public function testSetETagGenerator()
+    public function testSetETagGenerator(): void
     {
         $testGenerator = $this->createMock(ETagGeneratorInterface::class);
         $testGenerator
@@ -927,15 +946,10 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
-     * @internal param array $cacheConfig
-     *
-     * @covers       \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
+     * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setNotModifiedDataProvider
-     * @param array $requestHeaders
-     * @param array $responseHeaders
-     * @param array $exStatusCode
      */
-    public function testSetNotModified(array $requestHeaders, array $responseHeaders, $exStatusCode)
+    public function testSetNotModified(array $requestHeaders, array $responseHeaders, int $exStatusCode): void
     {
         $request = new HttpRequest();
         $request->getHeaders()->addHeaders($requestHeaders);

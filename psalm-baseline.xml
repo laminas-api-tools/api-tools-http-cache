@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.7.3@38c452ae584467e939d55377aaf83b5a26f19dd1">
+  <file src="src/DefaultETagGenerator.php">
+    <MixedArgument occurrences="1">
+      <code>$response-&gt;getContent()</code>
+    </MixedArgument>
+  </file>
+  <file src="src/HttpCacheListener.php">
+    <DocblockTypeContradiction occurrences="2">
+      <code>$request instanceof HttpRequest</code>
+      <code>$response instanceof HttpResponse</code>
+    </DocblockTypeContradiction>
+    <InvalidDocblockParamName occurrences="1">
+      <code>$config</code>
+    </InvalidDocblockParamName>
+    <MixedArgument occurrences="8">
+      <code>$_SERVER['REQUEST_TIME']</code>
+      <code>$controller</code>
+      <code>$date</code>
+      <code>$key</code>
+      <code>$key</code>
+      <code>$key</code>
+      <code>$key</code>
+      <code>$this-&gt;cacheConfig['expires']['value']</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="6">
+      <code>$cacheConfig["$controller::$action"]</code>
+      <code>$cacheConfig[$controller]</code>
+      <code>$cacheConfig[$routeName]</code>
+      <code>$cacheConfig['*']</code>
+      <code>$cacheConfig['*']</code>
+      <code>$cacheConfig['*']</code>
+    </MixedArrayAccess>
+    <MixedArrayOffset occurrences="2">
+      <code>$cacheConfig[$controller]</code>
+      <code>$cacheConfig[$controller]</code>
+    </MixedArrayOffset>
+    <MixedAssignment occurrences="18">
+      <code>$action</code>
+      <code>$cacheConfig</code>
+      <code>$config</code>
+      <code>$controller</code>
+      <code>$controllerConfig</code>
+      <code>$controllerConfig</code>
+      <code>$controllerConfig</code>
+      <code>$controllerConfig</code>
+      <code>$controllerConfig</code>
+      <code>$date</code>
+      <code>$key</code>
+      <code>$methodConfig</code>
+      <code>$methodConfig</code>
+      <code>$methodConfig</code>
+      <code>$methodConfig</code>
+      <code>$requestEtags</code>
+      <code>$responseEtag</code>
+      <code>$this-&gt;cacheConfig</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="1">
+      <code>getFieldValue</code>
+    </MixedMethodCall>
+    <PossiblyInvalidMethodCall occurrences="4">
+      <code>date</code>
+      <code>get</code>
+      <code>getFieldValue</code>
+      <code>has</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyNullReference occurrences="1">
+      <code>getParam</code>
+    </PossiblyNullReference>
+    <PossiblyUndefinedMethod occurrences="3">
+      <code>get</code>
+      <code>getFieldValue</code>
+      <code>has</code>
+    </PossiblyUndefinedMethod>
+    <UndefinedMethod occurrences="1">
+      <code>date</code>
+    </UndefinedMethod>
+    <UnnecessaryVarAnnotation occurrences="1">
+      <code>Headers</code>
+    </UnnecessaryVarAnnotation>
+  </file>
+  <file src="src/HttpCacheListenerFactory.php">
+    <MixedArgument occurrences="5">
+      <code>$config</code>
+      <code>$config</code>
+      <code>$config['etag']['generator']</code>
+      <code>$config['etag']['generator']</code>
+      <code>$config['etag']['generator']</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$config['api-tools-http-cache']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="2">
+      <code>$config</code>
+      <code>$config</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Module.php">
+    <MixedMethodCall occurrences="1">
+      <code>attach</code>
+    </MixedMethodCall>
+  </file>
+  <file src="test/HttpCacheListenerTest.php">
+    <MixedArgument occurrences="2">
+      <code>$exHeaders['Expires']</code>
+      <code>$headers['Expires']</code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion occurrences="3">
+      <code>$config</code>
+      <code>$config</code>
+      <code>$config</code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment occurrences="1">
+      <code>$headers</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="1">
+      <code>toArray</code>
+    </MixedMethodCall>
+    <MixedOperand occurrences="1">
+      <code>$_SERVER['REQUEST_TIME']</code>
+    </MixedOperand>
+    <PossiblyInvalidArgument occurrences="2">
+      <code>$routeMatch</code>
+      <code>$this-&gt;createRouteMatch($routeMatch)</code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidMethodCall occurrences="1">
+      <code>addHeaders</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyUndefinedMethod occurrences="1">
+      <code>addHeaders</code>
+    </PossiblyUndefinedMethod>
+    <UndefinedDocblockClass occurrences="2">
+      <code>$routeMatch</code>
+      <code>V2RouteMatch|RouteMatch</code>
+    </UndefinedDocblockClass>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getHeaders</code>
+    </UndefinedInterfaceMethod>
+  </file>
+</files>
