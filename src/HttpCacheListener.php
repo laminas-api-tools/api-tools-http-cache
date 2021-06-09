@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\ApiTools\HttpCache;
 
 use Laminas\EventManager\AbstractListenerAggregate;
@@ -16,6 +10,13 @@ use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
 
+use function in_array;
+use function is_array;
+use function preg_match;
+use function sprintf;
+use function strtolower;
+use function substr;
+
 /**
  * Since caching dynamic or not intended for caching
  * data could be worse than not caching at all,
@@ -23,33 +24,21 @@ use Laminas\Mvc\MvcEvent;
  */
 class HttpCacheListener extends AbstractListenerAggregate
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $cacheConfig = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $config = [];
 
-    /**
-     * @var ETagGeneratorInterface
-     */
+    /** @var ETagGeneratorInterface */
     protected $eTagGenerator;
 
-    /**
-     * HttpCacheListener constructor.
-     *
-     * @param ETagGeneratorInterface $eTagGenerator
-     */
-    public function __construct(ETagGeneratorInterface $eTagGenerator = null)
+    public function __construct(?ETagGeneratorInterface $eTagGenerator = null)
     {
         $this->eTagGenerator = $eTagGenerator ?: new DefaultETagGenerator();
     }
 
     /**
-     * @param EventManagerInterface $events
      * @param int                   $priority
      */
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -61,7 +50,6 @@ class HttpCacheListener extends AbstractListenerAggregate
     /**
      * Checks whether to handle this status code.
      *
-     * @param  HttpResponse $response
      * @return boolean
      */
     public function checkStatusCode(HttpResponse $response)
@@ -94,16 +82,13 @@ class HttpCacheListener extends AbstractListenerAggregate
         return ! empty($this->cacheConfig);
     }
 
-    /**
-     * @param MvcEvent $e
-     */
     public function onResponse(MvcEvent $e)
     {
         if (empty($this->config['enable'])) {
             return;
         }
 
-        /* @var $response HttpResponse */
+        /** @var HttpResponse $response */
         $response = $e->getResponse();
 
         if (! $response instanceof HttpResponse) {
@@ -114,11 +99,10 @@ class HttpCacheListener extends AbstractListenerAggregate
             return;
         }
 
-
-        /** @var $request HttpRequest */
+        /** @var HttpRequest $request */
         $request = $e->getRequest();
 
-        /* @var $headers Headers */
+        /** @var Headers $headers */
         $headers = $response->getHeaders();
 
         $this->setExpires($headers)
@@ -129,16 +113,13 @@ class HttpCacheListener extends AbstractListenerAggregate
             ->setNotModified($request, $response);
     }
 
-    /**
-     * @param MvcEvent $e
-     */
     public function onRoute(MvcEvent $e)
     {
         if (empty($this->config['enable'])) {
             return;
         }
 
-        /* @var $request HttpRequest */
+        /** @var HttpRequest $request */
         $request = $e->getRequest();
         if (! $request instanceof HttpRequest) {
             return;
@@ -152,9 +133,9 @@ class HttpCacheListener extends AbstractListenerAggregate
         $cacheConfig = $this->config['controllers'];
         $routeMatch  = $e->getRouteMatch();
 
-        $action      = $routeMatch->getParam('action');
-        $controller  = $routeMatch->getParam('controller');
-        $routeName   = $routeMatch->getMatchedRouteName();
+        $action     = $routeMatch->getParam('action');
+        $controller = $routeMatch->getParam('controller');
+        $routeName  = $routeMatch->getMatchedRouteName();
 
         /*
          * Searches, case sensitive, in this very order:
@@ -173,7 +154,8 @@ class HttpCacheListener extends AbstractListenerAggregate
         } elseif (! empty($this->config['regex_delimiter'])) {
             foreach ($cacheConfig as $key => $config) {
                 if (substr($key, 0, 1) === $this->config['regex_delimiter']) {
-                    if (preg_match($key, $routeName)
+                    if (
+                        preg_match($key, $routeName)
                         || preg_match($key, "$controller::$action")
                         || preg_match($key, $controller)
                     ) {
@@ -220,12 +202,12 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param  Headers $headers
      * @return self
      */
     public function setCacheControl(Headers $headers)
     {
-        if (! empty($this->cacheConfig['cache-control']['value'])
+        if (
+            ! empty($this->cacheConfig['cache-control']['value'])
             && (! empty($this->cacheConfig['cache-control']['override'])
                 || ! $headers->has('cache-control')
             )
@@ -252,12 +234,12 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param  Headers $headers
      * @return self
      */
     public function setExpires(Headers $headers)
     {
-        if (! empty($this->cacheConfig['expires']['value'])
+        if (
+            ! empty($this->cacheConfig['expires']['value'])
             && (! empty($this->cacheConfig['expires']['override'])
                 || ! $headers->has('expires')
             )
@@ -279,12 +261,12 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param  Headers $headers
      * @return self
      */
     public function setPragma(Headers $headers)
     {
-        if (! empty($this->cacheConfig['pragma']['value'])
+        if (
+            ! empty($this->cacheConfig['pragma']['value'])
             && (! empty($this->cacheConfig['pragma']['override'])
                 || ! $headers->has('pragma')
             )
@@ -297,12 +279,12 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param  Headers $headers
      * @return self
      */
     public function setVary(Headers $headers)
     {
-        if (! empty($this->cacheConfig['vary']['value'])
+        if (
+            ! empty($this->cacheConfig['vary']['value'])
             && (! empty($this->cacheConfig['vary']['override'])
                 || ! $headers->has('vary')
             )
@@ -315,8 +297,6 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param HttpRequest $request
-     * @param HttpResponse $response
      * @return $this
      */
     public function setETag(HttpRequest $request, HttpResponse $response)
@@ -328,7 +308,8 @@ class HttpCacheListener extends AbstractListenerAggregate
         }
 
         // ETag is already set and we should not override, default is to not overwrite.
-        if ($headers->has('Etag')
+        if (
+            $headers->has('Etag')
             && ! empty($this->cacheConfig['etag']['override'])
             && $this->cacheConfig['etag']['override'] === false
         ) {
@@ -343,13 +324,12 @@ class HttpCacheListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param HttpRequest $request
-     * @param HttpResponse $response
      * @return $this
      */
     public function setNotModified(HttpRequest $request, HttpResponse $response)
     {
-        if (! $request->getHeaders()->has('If-None-Match')
+        if (
+            ! $request->getHeaders()->has('If-None-Match')
             || ! $response->getHeaders()->has('Etag')
         ) {
             return $this;

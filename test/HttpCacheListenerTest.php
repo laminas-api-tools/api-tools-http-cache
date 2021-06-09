@@ -1,10 +1,9 @@
 <?php
+
 namespace LaminasTest\ApiTools\HttpCache;
 
 use DateTime;
 use DateTimeZone;
-use Interop\Container\ContainerInterface;
-use Laminas\ApiTools\HttpCache\DefaultETagGenerator;
 use Laminas\ApiTools\HttpCache\ETagGeneratorInterface;
 use Laminas\ApiTools\HttpCache\HttpCacheListener;
 use Laminas\Http\Request as HttpRequest;
@@ -15,11 +14,13 @@ use Laminas\Router\RouteMatch;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
+use function call_user_func_array;
+use function class_exists;
+use function md5;
+
 class HttpCacheListenerTest extends TestCase
 {
-    /**
-     * @var HttpCacheListener
-     */
+    /** @var HttpCacheListener */
     protected $instance;
 
     public function setUp()
@@ -27,6 +28,7 @@ class HttpCacheListenerTest extends TestCase
         $this->instance = new HttpCacheListener();
     }
 
+    /** @return V2RouteMatch|RouteMatch */
     protected function createRouteMatch(array $matches)
     {
         $class = class_exists(V2RouteMatch::class)
@@ -36,16 +38,17 @@ class HttpCacheListenerTest extends TestCase
         return new $class($matches);
     }
 
-    protected function calculateDate($seconds)
+    protected function calculateDate(int $seconds): string
     {
         $seconds += $_SERVER['REQUEST_TIME'];
-        $date = new \DateTime("@{$seconds}", new DateTimeZone('GMT'));
+        $date     = new DateTime("@{$seconds}", new DateTimeZone('GMT'));
 
         return $date->format('D, d M Y H:i:s \G\M\T');
     }
 
     /**
      * @see checkStatusCode
+     *
      * @return array
      */
     public function checkStatusCodeDataProvider()
@@ -60,6 +63,7 @@ class HttpCacheListenerTest extends TestCase
 
     /**
      * @see testOnRoute
+     *
      * @return array
      */
     public function configDataProvider()
@@ -72,7 +76,6 @@ class HttpCacheListenerTest extends TestCase
                 ['action' => 'bar', 'controller' => 'foo'],
                 [],
             ],
-
             [
                 ['enable' => true],
                 'get',
@@ -80,10 +83,9 @@ class HttpCacheListenerTest extends TestCase
                 ['action' => 'bar', 'controller' => 'foo'],
                 [],
             ],
-
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
                         'foo' => [
                             'get' => [
@@ -105,12 +107,11 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
-                        'foo' => [
+                        'foo'           => [
                             'get' => [
                                 'expires' => [
                                     'override' => true,
@@ -118,7 +119,7 @@ class HttpCacheListenerTest extends TestCase
                                 ],
                             ],
                         ],
-                        'foo::bar' => [
+                        'foo::bar'      => [
                             'get' => [
                                 'expires' => [
                                     'override' => true,
@@ -146,10 +147,9 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
                         'foo' => [
                             '*' => [
@@ -171,10 +171,9 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
                         '*' => [
                             'get' => [
@@ -196,10 +195,9 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
                         '*' => [
                             '*' => [
@@ -221,12 +219,11 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
-                        '*' => [
+                        '*'   => [
                             '*' => [
                                 'cache-control' => [
                                     'override' => false,
@@ -254,11 +251,10 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
-                    'controllers' => [
+                    'enable'          => true,
+                    'controllers'     => [
                         '~my\.[a-z.]{10}~' => [
                             '*' => [
                                 'cache-control' => [
@@ -267,7 +263,7 @@ class HttpCacheListenerTest extends TestCase
                                 ],
                             ],
                         ],
-                        '*' => [
+                        '*'                => [
                             'get' => [
                                 'cache-control' => [
                                     'override' => true,
@@ -288,11 +284,10 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
-                    'controllers' => [
+                    'enable'          => true,
+                    'controllers'     => [
                         '~[a-z]{3}::[a-z]{3}~' => [
                             '*' => [
                                 'cache-control' => [
@@ -314,11 +309,10 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
-                    'controllers' => [
+                    'enable'          => true,
+                    'controllers'     => [
                         '~[a-z]{3}~' => [
                             '*' => [
                                 'cache-control' => [
@@ -327,7 +321,7 @@ class HttpCacheListenerTest extends TestCase
                                 ],
                             ],
                         ],
-                        '*' => [
+                        '*'          => [
                             'get' => [
                                 'cache-control' => [
                                     'override' => true,
@@ -348,11 +342,10 @@ class HttpCacheListenerTest extends TestCase
                     ],
                 ],
             ],
-
             [
                 [
-                    'enable' => true,
-                    'controllers' => [
+                    'enable'          => true,
+                    'controllers'     => [
                         '~[a-z]{3}~' => [
                             '*' => [
                                 'cache-control' => [
@@ -379,26 +372,27 @@ class HttpCacheListenerTest extends TestCase
 
     /**
      * @see testMethodsReturnSelf
+     *
      * @return array
      */
     public function methodsReturnSelfDataProvider()
     {
-        $request  = new HttpRequest();
         $response = new HttpResponse();
         $headers  = $response->getHeaders();
 
         return [
             ['setCacheControl', [$headers]],
-            ['setCacheConfig',  [[]]],
-            ['setConfig',       [[]]],
-            ['setExpires',      [$headers]],
-            ['setPragma',       [$headers]],
-            ['setVary',         [$headers]],
+            ['setCacheConfig', [[]]],
+            ['setConfig', [[]]],
+            ['setExpires', [$headers]],
+            ['setPragma', [$headers]],
+            ['setVary', [$headers]],
         ];
     }
 
     /**
      * @see testOnResponse
+     *
      * @return array
      */
     public function onResponseDataProvider()
@@ -406,7 +400,7 @@ class HttpCacheListenerTest extends TestCase
         return [
             [
                 [
-                    'enable' => true,
+                    'enable'      => true,
                     'controllers' => [
                         'foo' => [
                             'get' => [
@@ -414,15 +408,15 @@ class HttpCacheListenerTest extends TestCase
                                     'override' => true,
                                     'value'    => 'max-age=86400, must-revalidate, public',
                                 ],
-                                'expires' => [
+                                'expires'       => [
                                     'override' => true,
                                     'value'    => 'Fri, 10 Oct 2014 20:44:35 GMT',
                                 ],
-                                'pragma' => [
+                                'pragma'        => [
                                     'override' => true,
                                     'value'    => 'token',
                                 ],
-                                'vary' => [
+                                'vary'          => [
                                     'override' => true,
                                     'value'    => 'accept-encoding, x-requested-with',
                                 ],
@@ -445,32 +439,39 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
      * @see testSetCacheControl
+     *
      * @return array
      */
     public function setCacheControlDataProvider()
     {
         return [
             [
-                ['cache-control' => [
-                    'override' => true,
-                    'value'    => 'max-age=86400, must-revalidate, public',
-                ]],
+                [
+                    'cache-control' => [
+                        'override' => true,
+                        'value'    => 'max-age=86400, must-revalidate, public',
+                    ],
+                ],
                 [],
                 ['Cache-Control' => 'max-age=86400, must-revalidate, public'],
             ],
             [
-                ['cache-control' => [
-                    'override' => true,
-                    'value'    => 'max-age=86400, must-revalidate, public',
-                ]],
+                [
+                    'cache-control' => [
+                        'override' => true,
+                        'value'    => 'max-age=86400, must-revalidate, public',
+                    ],
+                ],
                 ['Cache-Control' => 'max-age=86400, must-revalidate, no-cache, public'],
                 ['Cache-Control' => 'max-age=86400, must-revalidate, public'],
             ],
             [
-                ['cache-control' => [
-                    'override' => false,
-                    'value'    => 'max-age=86400, must-revalidate, public',
-                ]],
+                [
+                    'cache-control' => [
+                        'override' => false,
+                        'value'    => 'max-age=86400, must-revalidate, public',
+                    ],
+                ],
                 ['Cache-Control' => 'max-age=86400, must-revalidate, no-cache, public'],
                 ['Cache-Control' => 'max-age=86400, must-revalidate, no-cache, public'],
             ],
@@ -480,32 +481,39 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
      * @see testSetExpires
+     *
      * @return array
      */
     public function setExpiresDataProvider()
     {
         return [
             [
-                ['expires' => [
-                    'override' => true,
-                    'value'    => '+1 day',
-                ]],
+                [
+                    'expires' => [
+                        'override' => true,
+                        'value'    => '+1 day',
+                    ],
+                ],
                 [],
                 ['Expires' => $this->calculateDate(86400)],
             ],
             [
-                ['expires' => [
-                    'override' => true,
-                    'value'    => '+1 day',
-                ]],
+                [
+                    'expires' => [
+                        'override' => true,
+                        'value'    => '+1 day',
+                    ],
+                ],
                 ['Expires' => $this->calculateDate(0)],
                 ['Expires' => $this->calculateDate(86400)],
             ],
             [
-                ['expires' => [
-                    'override' => false,
-                    'value'    => '+1 day',
-                ]],
+                [
+                    'expires' => [
+                        'override' => false,
+                        'value'    => '+1 day',
+                    ],
+                ],
                 ['Expires' => $this->calculateDate(0)],
                 ['Expires' => $this->calculateDate(0)],
             ],
@@ -516,21 +524,25 @@ class HttpCacheListenerTest extends TestCase
              * (i.e., "already expired").
              */
             [
-                ['expires' => [
-                    'override' => true,
-                    'value'    => 'junk-date',
-                ]],
+                [
+                    'expires' => [
+                        'override' => true,
+                        'value'    => 'junk-date',
+                    ],
+                ],
                 [],
                 ['Expires' => $this->calculateDate(0)],
             ],
             [
-                ['expires' => [
-                    'override' => true,
-                    'value'    => 'junk-date',
-                ]],
+                [
+                    'expires' => [
+                        'override' => true,
+                        'value'    => 'junk-date',
+                    ],
+                ],
                 ['Date' => $this->calculateDate(10)],
                 [
-                    'Date' => $this->calculateDate(10),
+                    'Date'    => $this->calculateDate(10),
                     'Expires' => $this->calculateDate(10),
                 ],
             ],
@@ -540,32 +552,39 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32
      * @see testSetPragma
+     *
      * @return array
      */
     public function setPragmaDataProvider()
     {
         return [
             [
-                ['pragma' => [
-                    'override' => true,
-                    'value'    => 'no-cache',
-                ]],
+                [
+                    'pragma' => [
+                        'override' => true,
+                        'value'    => 'no-cache',
+                    ],
+                ],
                 [],
                 ['Pragma' => 'no-cache'],
             ],
             [
-                ['pragma' => [
-                    'override' => true,
-                    'value'    => 'no-cache',
-                ]],
+                [
+                    'pragma' => [
+                        'override' => true,
+                        'value'    => 'no-cache',
+                    ],
+                ],
                 ['Pragma' => 'token'],
                 ['Pragma' => 'no-cache'],
             ],
             [
-                ['pragma' => [
-                    'override' => false,
-                    'value'    => 'no-cache',
-                ]],
+                [
+                    'pragma' => [
+                        'override' => false,
+                        'value'    => 'no-cache',
+                    ],
+                ],
                 ['Pragma' => 'token'],
                 ['Pragma' => 'token'],
             ],
@@ -575,32 +594,39 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
      * @see testSetVary
+     *
      * @return array
      */
     public function setVaryDataProvider()
     {
         return [
             [
-                ['vary' => [
-                    'override' => true,
-                    'value'    => 'accept-encoding, x-requested-with',
-                ]],
+                [
+                    'vary' => [
+                        'override' => true,
+                        'value'    => 'accept-encoding, x-requested-with',
+                    ],
+                ],
                 [],
                 ['Vary' => 'accept-encoding, x-requested-with'],
             ],
             [
-                ['vary' => [
-                    'override' => true,
-                    'value'    => 'accept-encoding, x-requested-with',
-                ]],
+                [
+                    'vary' => [
+                        'override' => true,
+                        'value'    => 'accept-encoding, x-requested-with',
+                    ],
+                ],
                 ['Vary' => 'accept-encoding'],
                 ['Vary' => 'accept-encoding, x-requested-with'],
             ],
             [
-                ['vary' => [
-                    'override' => false,
-                    'value'    => 'accept-encoding, x-requested-with',
-                ]],
+                [
+                    'vary' => [
+                        'override' => false,
+                        'value'    => 'accept-encoding, x-requested-with',
+                    ],
+                ],
                 ['Vary' => 'accept-encoding'],
                 ['Vary' => 'accept-encoding'],
             ],
@@ -610,34 +636,41 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19
      * @see testSetETag
+     *
      * @return array
      */
     public function setETagDataProvider()
     {
         return [
             [
-                ['etag' => [
-                    'override' => true
-                ]],
+                [
+                    'etag' => [
+                        'override' => true,
+                    ],
+                ],
                 [],
                 ['Etag' => md5('')],
             ],
             [
-                ['vary' => [ ]],
+                ['vary' => []],
                 ['Etag' => '1234'],
                 ['Etag' => '1234'],
             ],
             [
-                ['vary' => [
-                    'override' => false
-                ]],
+                [
+                    'vary' => [
+                        'override' => false,
+                    ],
+                ],
                 ['Etag' => '1234'],
                 ['Etag' => '1234'],
             ],
             [
-                ['etag' => [
-                    'override' => true
-                ]],
+                [
+                    'etag' => [
+                        'override' => true,
+                    ],
+                ],
                 ['Etag' => '1234'],
                 ['Etag' => md5('')],
             ],
@@ -646,6 +679,7 @@ class HttpCacheListenerTest extends TestCase
 
     /**
      * @see testSetNotModified
+     *
      * @return array
      */
     public function setNotModifiedDataProvider()
@@ -664,7 +698,7 @@ class HttpCacheListenerTest extends TestCase
             [
                 ['If-None-Match' => '1234'],
                 ['Etag' => 'something-else'],
-                200
+                200,
             ],
         ];
     }
@@ -672,7 +706,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::checkStatusCode
      * @dataProvider checkStatusCodeDataProvider
-     *
      * @param array   $config
      * @param integer $code
      * @param boolean $exResult
@@ -692,7 +725,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @coversNothing
      * @dataProvider methodsReturnSelfDataProvider
-     *
      * @param string $method
      * @param array  $args
      */
@@ -706,7 +738,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onResponse
      * @dataProvider onResponseDataProvider
-     *
      * @param array  $config
      * @param string $method
      * @param array  $routeMatch
@@ -737,7 +768,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::onRoute
      * @dataProvider configDataProvider
-     *
      * @param array  $config
      * @param string $method
      * @param string $routeName
@@ -773,7 +803,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setCacheControl
      * @dataProvider setCacheControlDataProvider
-     *
      * @param array $cacheConfig
      * @param array $headers
      * @param array $exHeaders
@@ -794,7 +823,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setExpires
      * @dataProvider setExpiresDataProvider
-     *
      * @param array $cacheConfig
      * @param array $headers
      * @param array $exHeaders
@@ -822,7 +850,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setPragma
      * @dataProvider setPragmaDataProvider
-     *
      * @param array $cacheConfig
      * @param array $headers
      * @param array $exHeaders
@@ -843,7 +870,6 @@ class HttpCacheListenerTest extends TestCase
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setVaryDataProvider
-     *
      * @param array $cacheConfig
      * @param array $headers
      * @param array $exHeaders
@@ -861,11 +887,9 @@ class HttpCacheListenerTest extends TestCase
         $this->assertSame($exHeaders, $headers->toArray());
     }
 
-
     /**
      * @covers \Laminas\ApiTools\HttpCache\HttpCacheListener::setETag
      * @dataProvider setEtagDataProvider
-     *
      * @param array $cacheConfig
      * @param array $headers
      * @param array $exHeaders
@@ -891,8 +915,8 @@ class HttpCacheListenerTest extends TestCase
         $httpCacheListener = new HttpCacheListener($testGenerator->reveal());
         $httpCacheListener->setCacheConfig([
             'etag' => [
-                'override' => true,
-                'generator' => 'test-etag-generator'
+                'override'  => true,
+                'generator' => 'test-etag-generator',
             ],
         ]);
 
@@ -905,13 +929,13 @@ class HttpCacheListenerTest extends TestCase
     }
 
     /**
+     * @internal param array $cacheConfig
+     *
      * @covers       \Laminas\ApiTools\HttpCache\HttpCacheListener::setvary
      * @dataProvider setNotModifiedDataProvider
-     *
      * @param array $requestHeaders
      * @param array $responseHeaders
      * @param array $exStatusCode
-     * @internal param array $cacheConfig
      */
     public function testSetNotModified(array $requestHeaders, array $responseHeaders, $exStatusCode)
     {

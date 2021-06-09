@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-http-cache for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-http-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\ApiTools\HttpCache;
 
 use Interop\Container\ContainerInterface;
@@ -18,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 class HttpCacheListenerFactoryTest extends TestCase
 {
+    use DeprecatedAssertionsTrait;
+
     public function testFactoryCreatesListenerWhenNoConfigServiceIsPresent()
     {
         $container = $this->prophesize(ContainerInterface::class);
@@ -29,13 +25,13 @@ class HttpCacheListenerFactoryTest extends TestCase
         $this->assertInstanceOf(HttpCacheListener::class, $listener);
     }
 
-    public function testFactoryWillUseConfigServiceWhenPresentToCreateListener()
+    public function testFactoryWillUseConfigServiceWhenPresentToCreateListener(): HttpCacheListener
     {
         $config = [
             'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
-                'http_codes_black_list' => [ 201, 404 ],
+                'http_codes_black_list' => [201, 404],
                 'regex_delimiter'       => '#',
             ],
         ];
@@ -54,8 +50,9 @@ class HttpCacheListenerFactoryTest extends TestCase
     /**
      * @depends testFactoryWillUseConfigServiceWhenPresentToCreateListener
      */
-    public function testFactoryWillSetDefaultETagGeneratorIfNoneIsSpecifiedInConfiguration($listener)
-    {
+    public function testFactoryWillSetDefaultETagGeneratorIfNoneIsSpecifiedInConfiguration(
+        HttpCacheListener $listener
+    ) {
         $this->assertAttributeInstanceOf(DefaultETagGenerator::class, 'eTagGenerator', $listener);
     }
 
@@ -65,9 +62,9 @@ class HttpCacheListenerFactoryTest extends TestCase
             'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
-                'http_codes_black_list' => [ 201, 404 ],
+                'http_codes_black_list' => [201, 404],
                 'regex_delimiter'       => '#',
-                'etag' => [
+                'etag'                  => [
                     'generator' => 'not-a-valid-generator',
                 ],
             ],
@@ -78,11 +75,11 @@ class HttpCacheListenerFactoryTest extends TestCase
         $container->get('config')->willReturn($config);
         $container->has('not-a-valid-generator')->willReturn(false);
 
-        $factory  = new HttpCacheListenerFactory();
+        $factory = new HttpCacheListenerFactory();
 
         $this->expectException(ServiceNotCreatedException::class);
         $this->expectExceptionMessage('does not resolve to a known service');
-        $listener = $factory($container->reveal());
+        $factory($container->reveal());
     }
 
     public function testFactoryWillRaiseExceptionIfSpecifiedETagGeneratorIsInvalid()
@@ -91,9 +88,9 @@ class HttpCacheListenerFactoryTest extends TestCase
             'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
-                'http_codes_black_list' => [ 201, 404 ],
+                'http_codes_black_list' => [201, 404],
                 'regex_delimiter'       => '#',
-                'etag' => [
+                'etag'                  => [
                     'generator' => 'not-a-valid-generator',
                 ],
             ],
@@ -105,11 +102,11 @@ class HttpCacheListenerFactoryTest extends TestCase
         $container->has('not-a-valid-generator')->willReturn(true);
         $container->get('not-a-valid-generator')->willReturn([]);
 
-        $factory  = new HttpCacheListenerFactory();
+        $factory = new HttpCacheListenerFactory();
 
         $this->expectException(ServiceNotCreatedException::class);
         $this->expectExceptionMessage('requires a valid');
-        $listener = $factory($container->reveal());
+        $factory($container->reveal());
     }
 
     public function testFactoryWillInjectSpecifiedETagGenerator()
@@ -120,9 +117,9 @@ class HttpCacheListenerFactoryTest extends TestCase
             'api-tools-http-cache' => [
                 'enable'                => true,
                 'controllers'           => [],
-                'http_codes_black_list' => [ 201, 404 ],
+                'http_codes_black_list' => [201, 404],
                 'regex_delimiter'       => '#',
-                'etag' => [
+                'etag'                  => [
                     'generator' => 'a-valid-generator',
                 ],
             ],
@@ -134,7 +131,7 @@ class HttpCacheListenerFactoryTest extends TestCase
         $container->has('a-valid-generator')->willReturn(true);
         $container->get('a-valid-generator')->willReturn($eTagGenerator);
 
-        $factory  = new HttpCacheListenerFactory();
+        $factory = new HttpCacheListenerFactory();
 
         $listener = $factory($container->reveal());
         $this->assertAttributeSame($eTagGenerator, 'eTagGenerator', $listener);
