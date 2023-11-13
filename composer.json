@@ -27,7 +27,7 @@
         }
     },
     "require": {
-        "php": "^7.3 || ~8.0.0 || ~8.1.0",
+        "php": "^7.3 || ~8.0.0 || ~8.1.0 || ~8.2.0",
         "laminas/laminas-eventmanager": "^3.0.1",
         "laminas/laminas-http": "^2.13",
         "laminas/laminas-mvc": "^3.1",
